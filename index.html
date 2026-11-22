@@ -183,8 +183,10 @@
   /* a column: [button] over [popup]. The popup lives inside this box rather than hanging outside it,
      because Safari clips overflowing children of 3D-transformed cards down to a thin sliver */
   .flip-wrap {
-    position: absolute; top: clamp(18px, 3vh, 26px); right: clamp(18px, 3vw, 26px); z-index: 5;
-    display: flex; flex-direction: column; align-items: flex-end; gap: 18px; pointer-events: none;
+    /* anchored by its bottom edge so the button stays put and the popup stacks upward above it */
+    --top: clamp(18px, 3vh, 26px);
+    position: absolute; top: auto; bottom: calc(100% - var(--top) - 50px); right: clamp(18px, 3vw, 26px); z-index: 5;
+    display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 18px; pointer-events: none;
   }
   .flip-wrap .flip { pointer-events: auto; }
   .flip {
@@ -204,7 +206,7 @@
   .flip-tip {
     position: relative; display: grid; gap: 1px; padding: 10px 14px 11px; text-align: left; white-space: nowrap;
     isolation: isolate; pointer-events: none;
-    transform-origin: calc(100% - 25px) -12px; /* grows out of the arrow's tip */
+    transform-origin: calc(100% - 25px) calc(100% + 12px); /* grows out of the arrow's tip */
     opacity: 0; scale: 0.5; rotate: -5deg;
     transition: opacity 140ms ease, scale 220ms var(--smooth), rotate 220ms var(--smooth);
   }
@@ -215,7 +217,7 @@
     transition: opacity 140ms ease, scale 620ms var(--bouncy), rotate 620ms var(--bouncy);
   }
   .flip-wrap.tip .flip-tip { animation: tip-bob 2.6s ease-in-out 800ms infinite; }
-  @keyframes tip-bob { 50% { translate: 0 4px; } }
+  @keyframes tip-bob { 50% { translate: 0 -4px; } }
   /* body and arrow are one shape behind the text; zero-blur drop-shadows trace that whole shape,
      so the outline and the bottom lip run around the arrow with no seam */
   .tip-bg {
@@ -223,8 +225,8 @@
     filter: drop-shadow(2px 0 0 #D3DAF6) drop-shadow(-2px 0 0 #D3DAF6) drop-shadow(0 -2px 0 #D3DAF6) drop-shadow(0 2px 0 #D3DAF6)
             drop-shadow(0 5px 0 #BCC7F3);
   }
-  .tip-bg::after { /* the arrow, centred under the 50px button */
-    content: ""; position: absolute; top: -7px; right: 18px; width: 15px; height: 15px; border-radius: 4px;
+  .tip-bg::after { /* the arrow, pointing down at the centre of the 50px button */
+    content: ""; position: absolute; bottom: -7px; right: 18px; width: 15px; height: 15px; border-radius: 4px;
     background: #F5F7FF; transform: rotate(45deg);
   }
 
@@ -341,6 +343,11 @@
   .hint { position: fixed; z-index: 3; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; font-size: 12.5px; font-weight: 700; color: var(--ink-2); opacity: 0.8; animation: rise 700ms var(--bouncy) 1200ms both; pointer-events: none; white-space: nowrap; }
   /* ---------- small screens: stack, but still one screen tall ---------- */
   @media (max-width: 720px) {
+    /* phones: the card sits near the top of the screen, so the popup drops below the button instead */
+    .flip-wrap { top: var(--top); bottom: auto; flex-direction: column; }
+    .flip-tip { transform-origin: calc(100% - 25px) -12px; }
+    .tip-bg::after { bottom: auto; top: -7px; }
+    @keyframes tip-bob { 50% { translate: 0 4px; } }
     body { overflow-y: auto; }
     main { height: auto; min-height: 100dvh; padding: 14px 12px 34px; }
     .face { border-radius: 32px; }
