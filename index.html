@@ -79,10 +79,10 @@
   .back { align-content: center; }
   /* extra room on the left nudges the whole back (drawing and text) toward the middle */
   .album { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: clamp(24px, 4vw, 44px); width: 100%; padding: 4px 6px 8px clamp(20px, 4vw, 48px); }
-  .art { margin: 0; display: grid; justify-items: center; gap: 18px; }
+  /* --s (the drawing's size) lives here so the credit can line itself up with the tilted frame */
+  .art { --s: clamp(170px, 34vh, 300px); margin: 0; display: grid; justify-items: center; gap: 28px; }
   /* the whole drawing, framed: a white mat inside a blue rim, tilted, and it stays tilted */
   .art-frame {
-    --s: clamp(170px, 34vh, 300px);
     width: var(--s); aspect-ratio: 1; padding: 9px; border-radius: 22px; background: #fff;
     box-shadow: 0 0 0 5px var(--blue), 0 11px 0 5px var(--blue-lip);
     rotate: -4deg; cursor: pointer;
@@ -91,6 +91,11 @@
   .art-frame img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 12px; user-select: none; -webkit-user-drag: none; }
   .art-frame:hover { translate: 0 -4px; box-shadow: 0 0 0 5px var(--blue), 0 15px 0 5px var(--blue-lip); }
   .credit { font-size: 13px; font-weight: 800; color: var(--blue-ink); background: var(--blue-soft); padding: 3px 12px; border-radius: 999px; rotate: -4deg; } /* same tilt as the drawing */
+  /* the frame's -4deg tilt swings its bottom edge right by (size / 2) * sin 4deg, about 3.5% of the size;
+     shifting the credit by the same amount puts it under the tilted frame's centre */
+  .credit { translate: calc(var(--s) * 0.035) 0; }
+  .credit { display: inline-flex; align-items: center; gap: 2px; }
+  .credit .heart { width: 14px; height: 14px; flex: none; rotate: 14deg; } /* a little extra tilt of its own */
 
   /* the text block sits centered in the space right of the drawing; its lines share one left edge */
   .more { min-width: 0; width: max-content; max-width: 100%; justify-self: center; display: grid; gap: clamp(14px, 2.6vh, 22px); align-content: center; justify-items: start; text-align: left; }
@@ -354,7 +359,7 @@
     .album { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; padding-left: 6px; }
     .more { width: auto; justify-self: center; justify-items: center; text-align: center; }
     .album-title { font-size: 36px; }
-    .art-frame { --s: 230px; }
+    .art { --s: 230px; }
     .more-note { font-size: 14px; }
     .top { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 12px; }
     .pic { --s: 116px; }
@@ -403,7 +408,7 @@
     <div class="top">
       <div class="pic-wrap">
         <button class="pic" type="button" aria-label="Boop hucklberi">
-          <img src="avatar.webp" alt="hucklberi’s profile picture: a sleepy blond character peeking out with a star mask" width="256" height="256">
+          <img src="avatar.png" alt="hucklberi’s profile picture: a blond character peeking out from behind a yellow star with a sleepy mask" width="416" height="416">
         </button>
       </div>
 
@@ -514,7 +519,7 @@
     <div class="album">
       <figure class="art">
         <button class="art-frame" type="button" aria-label="Wiggle the drawing"><img src="photos/sleepy.webp" alt="A sleepy dark-haired character in a blue shirt, yawning, with a tiny blond star-masked buddy peeking from the pocket" width="600" height="600"></button>
-        <figcaption class="credit">by Ryn</figcaption>
+        <figcaption class="credit">by Ryn<svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.6 0 5.6 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z" fill="var(--blue)"/></svg></figcaption>
       </figure>
       <div class="more">
         <h2 class="album-title">A bit more of me!</h2>
