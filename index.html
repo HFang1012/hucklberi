@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>hucklberi</title>
+<meta name="description" content="hucklberi (hf) codes websites, apps, and video games, and builds with the team Empty Console.">
+<link rel="icon" href="avatar.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #E9EDFB; --paper-deep: #DCE2F7;
+    --card: #FBFCFF; --card-lip: #D3DAF6; --well: #EFF2FC; --edge: #C9D1F2;
+    --ink: #2A2D45; --ink-2: #646985;
+    --blue: #7C8FE0; --blue-lip: #5A6CC4; --blue-soft: #E3E8FC; --blue-ink: #3D4FAE;
+    --yellow: #FFD45C; --yellow-lip: #E9A93A; --yellow-soft: #FFF0C4; --yellow-ink: #9A6A00;
+    --purple: #B9A5F4; --purple-lip: #8E76DC; --purple-soft: #ECE5FD; --purple-ink: #6A50C4;
+    --font: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+    --bouncy: linear(0, 0.055, 0.192, 0.373, 0.565, 0.745, 0.898, 1.016, 1.098, 1.144, 1.162, 1.158, 1.138, 1.11, 1.079, 1.049, 1.023, 1.002, 0.987, 0.978, 0.974, 0.974, 0.976, 0.981, 0.986, 0.991, 0.995, 0.999, 1);
+    --smooth: linear(0, 0.067, 0.217, 0.391, 0.558, 0.7, 0.811, 0.893, 0.95, 0.985, 1.006, 1.016, 1.02, 1.019, 1.016, 1.013, 1.01, 1.007, 1.004, 1.003, 1.001, 1, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { background: var(--paper); }
+  body {
+    margin: 0; color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+    background: var(--paper);
+  }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--purple-lip); outline-offset: 4px; border-radius: 10px; }
+
+  /* ---------- the living background ---------- */
+  /* A dotted grid drifts diagonally underneath; rounded shapes float over it on a canvas. */
+  .dots {
+    position: fixed; inset: -40px; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(circle, var(--card-lip) 2px, transparent 2.6px);
+    background-size: 34px 34px;
+    animation: drift 40s linear infinite;
+  }
+  @keyframes drift { to { transform: translate(34px, 34px); } }
+  #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; }
+
+  /* ---------- stage ---------- */
+  main {
+    position: relative; z-index: 2; height: 100dvh; display: grid; place-items: center;
+    padding: 20px; pointer-events: none;
+  }
+  main > * { pointer-events: auto; }
+
+  main { perspective: 1800px; }
+  /* the card is a two-sided object: it turns on Y, each face hides its back */
+  .card {
+    position: relative; width: min(860px, 100%);
+    transform-style: preserve-3d; transform: rotateY(0deg);
+    /* "backwards", not "both": a held opacity animation makes Chrome flatten the 3D flip and the back face vanishes */
+    animation: card-in 900ms var(--bouncy) backwards;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .face {
+    background: var(--card); border-radius: 40px;
+    box-shadow: 0 0 0 2px var(--edge), 0 10px 0 2px var(--card-lip);
+    padding: clamp(20px, 3.4vh, 34px) clamp(20px, 3.4vw, 36px) clamp(18px, 2.6vh, 26px);
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  }
+  .front { position: relative; }
+  .back { position: absolute; inset: 0; transform: rotateY(180deg); visibility: hidden; display: grid; place-items: center; }
+  /* the script swaps faces at the exact moment the card is edge-on mid-flight;
+     backface-visibility alone can leak animated children through in Safari */
+  .card.flipped .front { visibility: hidden; }
+  .card.flipped .back { visibility: visible; }
+
+  /* ---------- the back: "A bit more of me!" ---------- */
+  .back { align-content: center; }
+  .album { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: clamp(24px, 4vw, 44px); width: 100%; padding: 4px 6px 8px; }
+  .art { margin: 0; display: grid; justify-items: center; gap: 18px; }
+  /* the whole drawing, framed: a white mat inside a blue rim, tilted, and it stays tilted */
+  .art-frame {
+    --s: clamp(170px, 34vh, 300px);
+    width: var(--s); aspect-ratio: 1; padding: 9px; border-radius: 22px; background: #fff;
+    box-shadow: 0 0 0 5px var(--blue), 0 11px 0 5px var(--blue-lip);
+    rotate: -4deg; cursor: pointer;
+    transition: translate 400ms var(--bouncy), box-shadow 200ms var(--bouncy);
+  }
+  .art-frame img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 12px; user-select: none; -webkit-user-drag: none; }
+  .art-frame:hover { translate: 0 -4px; box-shadow: 0 0 0 5px var(--blue), 0 15px 0 5px var(--blue-lip); }
+  .credit { font-size: 13px; font-weight: 800; color: var(--blue-ink); background: var(--blue-soft); padding: 3px 12px; border-radius: 999px; rotate: -4deg; } /* same tilt as the drawing */
+
+  /* the text block sits centered in the space right of the drawing; its lines share one left edge */
+  .more { min-width: 0; width: max-content; max-width: 100%; justify-self: center; display: grid; gap: clamp(14px, 2.6vh, 22px); align-content: center; justify-items: start; text-align: left; }
+  .album-title {
+    margin: 0; max-width: 6.4em; text-wrap: balance; font-size: clamp(34px, 6.4vh, 56px); line-height: 1.05; font-weight: 900; letter-spacing: -0.02em;
+    color: #FFDB4D; text-shadow: 2px 2px 0 #7186EC, 3px 4px 0 #7186EC, 4px 6px 0 #7186EC, 5px 8px 0 rgba(113,134,236,0.3);
+  }
+  .more-note { margin: 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; line-height: 1.6; }
+  .more-note .line { display: block; } /* one sentence per line */
+  /* each time the back comes round, everything lands one after another */
+  .back.arrive .art-frame { animation: photo-in 760ms var(--bouncy) 60ms both; }
+  .back.arrive .credit { animation: credit-in 600ms var(--bouncy) 260ms both; }
+  .back.arrive .album-title { animation: rise 600ms var(--bouncy) 120ms both; }
+  .back.arrive .more-note { animation: rise 600ms var(--bouncy) 200ms both; }
+  @keyframes credit-in { from { opacity: 0; scale: 0.5; } }
+  @keyframes photo-in { from { opacity: 0; scale: 0.4; } }
+  @keyframes card-in { from { opacity: 0; scale: 0.6; rotate: -4deg; } 30% { opacity: 1; } }
+
+  .top { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3.4vw, 40px); align-items: center; }
+
+  /* ---------- the big bubbly avatar ---------- */
+  .pic-wrap { padding: 6px 6px 14px; }
+  .pic {
+    --s: clamp(150px, 25vh, 232px);
+    position: relative; display: block; width: var(--s); height: var(--s); padding: 7px; border-radius: 30%;
+    background: #fff;
+    box-shadow: 0 0 0 5px var(--yellow), 0 11px 0 5px var(--yellow-lip);
+    rotate: -5deg;
+    transition: scale 500ms var(--bouncy), box-shadow 200ms var(--bouncy);
+    animation: pic-in 1100ms var(--bouncy) 180ms both; cursor: pointer;
+  }
+  @keyframes pic-in { from { opacity: 0; scale: 0.3; rotate: -40deg; } 25% { opacity: 1; } }
+  .pic img { display: block; width: 100%; height: 100%; border-radius: 26%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+  /* a glossy highlight on the frame, like Pane's */
+  .pic::after { content: ""; position: absolute; left: 13%; top: 10%; width: 20%; height: 8%; border-radius: 999px; background: rgba(255,255,255,0.75); rotate: -32deg; pointer-events: none; }
+
+  /* ---------- name + details ---------- */
+  .info { min-width: 0; }
+  .info > * { animation: rise 700ms var(--bouncy) both; animation-delay: var(--d, 0ms); }
+  @keyframes rise { from { opacity: 0; translate: 0 14px; } }
+
+  h1 {
+    margin: 0; font-size: clamp(42px, 7.6vh, 70px); line-height: 1; font-weight: 900; letter-spacing: -0.02em;
+    /* a paler butter yellow over a softer periwinkle than the rest of the page uses */
+    color: #FFDB4D;
+    /* stacked hard shadows read as a thick, chunky drop with no blur */
+    text-shadow: 2px 2px 0 #7186EC, 3px 4px 0 #7186EC, 4px 6px 0 #7186EC, 5px 8px 0 rgba(113,134,236,0.3);
+    padding-right: 56px; --d: 320ms;
+  }
+  h1 .ch { display: inline-block; transition: translate 380ms var(--bouncy); }  h1 .ch:hover { translate: 0 -8px; }
+  .bio { margin: clamp(10px, 1.8vh, 16px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
+
+  .rows { margin-top: clamp(10px, 1.8vh, 16px); display: grid; gap: 8px; --d: 470ms; }
+  .row { display: grid; grid-template-columns: 92px 1fr; align-items: center; font-size: 17px; font-weight: 800; }
+  .k { justify-self: start; font-size: 11px; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; }
+  .k.discord { color: #4A55C8; background: #E2E5FE; }
+  .k.email { color: var(--yellow-ink); background: var(--yellow-soft); }
+  .k.github { color: var(--purple-ink); background: var(--purple-soft); }
+  .v { justify-self: start; font-weight: 800; text-decoration: underline 2.5px transparent; text-underline-offset: 4px; transition: text-decoration-color 140ms ease, color 140ms ease; min-width: 0; overflow-wrap: anywhere; text-align: left; }
+  .v:hover { text-decoration-color: var(--yellow); }
+  .copy-hint { display: inline-block; margin-left: 8px; font-size: 12px; font-weight: 800; color: var(--blue-ink); background: var(--blue-soft); padding: 1px 8px; border-radius: 999px; opacity: 0; scale: 0.6; transition: opacity 160ms ease, scale 360ms var(--bouncy); vertical-align: 2px; }
+  .v:hover .copy-hint, .v:focus-visible .copy-hint, .v.done .copy-hint { opacity: 1; scale: 1; }
+  .v.done .copy-hint { color: var(--yellow-ink); background: var(--yellow-soft); }
+  /* GitHub's pill says where the link goes; its arrow nudges up and out on hover */
+  .go-hint { color: var(--purple-ink); background: var(--purple-soft); }
+  .go-hint svg { width: 10px; height: 10px; margin-left: 4px; vertical-align: -0.5px; transition: translate 300ms var(--bouncy); }
+  .v:hover .go-hint svg { translate: 2px -2px; }
+
+  /* likes: chunky keys you can press */
+  .likes { margin-top: clamp(12px, 2vh, 18px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
+  .like {
+    display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 10px; border-radius: 14px;
+    font-size: 14px; font-weight: 800; margin-bottom: 4px;
+    background: var(--c-soft); color: var(--c-ink); box-shadow: 0 4px 0 var(--c-lip);
+    transition: translate 200ms var(--bouncy), box-shadow 200ms var(--bouncy);
+  }
+  /* icons turn on an HTML wrapper: Safari pivots a transformed <svg> from its corner */
+  .like .li { display: block; width: 20px; height: 20px; flex: none; transform-origin: 50% 50%; transition: rotate 500ms var(--bouncy), scale 500ms var(--bouncy); }
+  .like .li svg { display: block; width: 100%; height: 100%; }
+  .like:hover { translate: 0 -2px; box-shadow: 0 6px 0 var(--c-lip); }
+  .like:hover .li { rotate: -12deg; scale: 1.15; }
+  .like:active { translate: 0 3px; box-shadow: 0 1px 0 var(--c-lip); }
+  .like.spin .li { animation: spin 620ms var(--bouncy); }
+  @keyframes spin { from { rotate: -360deg; scale: 0.4; } }
+  .like.blue   { --c-soft: var(--blue-soft);   --c-ink: var(--blue-ink);   --c-lip: #C2CCF4; }
+  .like.yellow { --c-soft: var(--yellow-soft); --c-ink: var(--yellow-ink); --c-lip: #F2D58A; }
+  .like.purple { --c-soft: var(--purple-soft); --c-ink: var(--purple-ink); --c-lip: #D5C8FA; }
+
+  /* ---------- the flip button, top right of each face ---------- */
+  .flip-wrap { position: absolute; top: clamp(18px, 3vh, 26px); right: clamp(18px, 3vw, 26px); z-index: 5; }
+  .flip {
+    display: grid; place-items: center; width: 50px; height: 50px; border-radius: 17px; color: var(--blue-ink);
+    background: var(--blue-soft); box-shadow: 0 5px 0 #BCC7F3;
+    transition: translate 200ms var(--bouncy), box-shadow 200ms var(--bouncy);
+    animation: pop-in 700ms var(--bouncy) 700ms both;
+  }
+  @keyframes pop-in { from { opacity: 0; scale: 0.3; } }
+  .flip:hover { translate: 0 -1px; box-shadow: 0 6px 0 #BCC7F3; }
+  .flip:active { translate: 0 4px; box-shadow: 0 1px 0 #BCC7F3; }
+  .flip .fi { display: block; width: 24px; height: 24px; transform-origin: 50% 50%; transition: rotate 600ms var(--bouncy); }
+  .flip .fi svg { display: block; width: 100%; height: 100%; }
+  .flip:hover .fi { rotate: 180deg; }
+
+  /* "Click me to flip!": a yellow speech bubble whose little arrow points at the button */
+  .flip-tip {
+    position: absolute; right: calc(100% + 16px); top: 50%; margin-top: -19px; height: 34px; line-height: 32px; padding: 0 13px;
+    white-space: nowrap; font-size: 13.5px; font-weight: 900; color: var(--yellow-ink);
+    background: var(--yellow-soft); border-radius: 14px; box-shadow: 0 0 0 2px #F7E2A8, 0 3px 0 2px #F7E2A8;
+    pointer-events: none; transform-origin: calc(100% + 16px) 50%;
+    opacity: 0; scale: 0.4; rotate: 6deg;
+    transition: opacity 140ms ease, scale 220ms var(--smooth), rotate 220ms var(--smooth);
+  }
+  .flip-wrap.tip .flip-tip, .flip-wrap:hover .flip-tip, .flip-wrap:has(.flip:focus-visible) .flip-tip {
+    opacity: 1; scale: 1; rotate: 0deg;
+    transition: opacity 140ms ease, scale 620ms var(--bouncy), rotate 620ms var(--bouncy);
+  }
+  .flip-wrap.tip .flip-tip { animation: tip-bob 2.4s ease-in-out 800ms infinite; }
+  @keyframes tip-bob { 50% { translate: -4px 0; } }
+  /* the arrow: a rounded square turned 45deg, outlined only on its two outer edges */
+  .flip-tip::after {
+    content: ""; position: absolute; right: -6px; top: 50%; width: 13px; height: 13px; margin-top: -7px; border-radius: 3px;
+    background: var(--yellow-soft); box-shadow: 2px -2px 0 #F7E2A8; transform: rotate(45deg);
+  }
+
+  /* ---------- projects tray ---------- */
+  .tray {
+    margin-top: clamp(16px, 3vh, 26px); background: var(--well); border-radius: 30px; padding: 14px;
+    box-shadow: inset 0 -4px 0 var(--card-lip);
+  }
+  .tray-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 2px 6px 12px; animation: rise 700ms var(--bouncy) 620ms both; }
+  .tray-head h2 { margin: 0; font-size: 19px; font-weight: 900; letter-spacing: -0.01em; }
+  .tray-head p { margin: 0; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+  .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+  .proj { position: relative; z-index: 1; animation: pop-in 700ms var(--bouncy) both; animation-delay: var(--d); }
+  /* the animation gives each tile its own layer, so the open one has to rise above the flip button */
+  .proj.open { z-index: 10; }
+  .tile {
+    width: 100%; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; text-align: left;
+    padding: 12px 14px 12px 12px; border-radius: 22px; margin-bottom: 6px;
+    background: var(--card); box-shadow: 0 0 0 2px var(--edge), 0 6px 0 2px var(--edge);
+    transition: translate 220ms var(--bouncy), box-shadow 220ms var(--bouncy);
+  }
+  .tile:hover, .proj.open .tile { translate: 0 -2px; box-shadow: 0 0 0 2px var(--t-c), 0 8px 0 2px var(--t-lip); }
+  .tile:active { translate: 0 4px; box-shadow: 0 0 0 2px var(--t-c), 0 2px 0 2px var(--t-lip); }
+  .tile .ico {
+    width: 52px; height: 52px; border-radius: 17px; display: grid; place-items: center; overflow: hidden;
+    background: var(--t-soft); box-shadow: 0 4px 0 var(--t-lip2);
+    transition: rotate 500ms var(--bouncy), scale 500ms var(--bouncy);
+  }
+  .tile:hover .ico, .proj.open .tile .ico { rotate: -8deg; scale: 1.06; }
+  .tile .ico img { width: 100%; height: 100%; object-fit: cover; }
+  .tile .ico svg { width: 32px; height: 32px; }
+  .tile strong { display: block; font-size: 17px; font-weight: 900; line-height: 1.2; }
+  .tile small { display: block; font-size: 13px; font-weight: 700; color: var(--ink-2); line-height: 1.3; margin-top: 2px; }
+  .proj.pane  { --t-c: var(--purple); --t-lip: var(--purple-lip); --t-soft: var(--purple-soft); --t-lip2: #D5C8FA; --t-ink: var(--purple-ink); }
+  .proj.team  { --t-c: var(--blue);   --t-lip: var(--blue-lip);   --t-soft: var(--blue-soft);   --t-lip2: #C2CCF4; --t-ink: var(--blue-ink); }
+  .proj.itch  { --t-c: var(--yellow); --t-lip: var(--yellow-lip); --t-soft: var(--yellow-soft); --t-lip2: #F2D58A; --t-ink: var(--yellow-ink); }
+
+  /* ---------- popups, after Pane's who-card: they pop up out of the tile with a bounce ---------- */
+  .pop {
+    position: absolute; left: 50%; bottom: calc(100% + 18px); z-index: 30;
+    translate: calc(-50% + var(--shift, 0px)) 0;
+    width: min(360px, calc(100vw - 32px)); padding: 18px 18px 18px 18px;
+    background: #F5F7FF; border-radius: 28px; color: var(--ink);
+    box-shadow: 0 0 0 2px var(--t-c), 0 8px 0 2px var(--t-lip);
+    transform-origin: calc(50% - var(--shift, 0px)) calc(100% + 14px);
+    opacity: 0; visibility: hidden; scale: 0.5; rotate: 5deg;
+    transition: opacity 150ms ease, scale 220ms var(--smooth), rotate 220ms var(--smooth), visibility 0s linear 220ms;
+  }
+  .proj.open .pop {
+    opacity: 1; visibility: visible; scale: 1; rotate: 0deg;
+    transition: opacity 140ms ease, scale 620ms var(--bouncy), rotate 620ms var(--bouncy), visibility 0s;
+  }
+  /* bridge so the mouse can cross the gap, and the little arrow */
+  .pop::before { content: ""; position: absolute; left: 0; right: 0; bottom: -26px; height: 26px; }
+  .pop::after {
+    content: ""; position: absolute; left: calc(50% - var(--shift, 0px)); bottom: -9px; width: 18px; height: 18px; border-radius: 5px;
+    background: #F5F7FF; box-shadow: 2px 2px 0 var(--t-c), 4px 4px 0 var(--t-lip); transform: translateX(-50%) rotate(45deg);
+  }
+  .pop-head { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
+  .pop-pic {
+    width: 64px; height: 64px; padding: 3px; border-radius: 22px; background: #fff; display: grid; place-items: center; overflow: hidden;
+    box-shadow: 0 0 0 3px var(--t-c), 0 5px 0 3px var(--t-lip);
+    margin: 3px 3px 8px;
+    opacity: 0; scale: 0.4; rotate: -16deg; transition: opacity 120ms ease, scale 200ms var(--smooth), rotate 200ms var(--smooth);
+  }
+  .pop-pic > * { width: 100%; height: 100%; border-radius: 19px; object-fit: cover; }
+  .pop-pic svg { width: 62%; height: 62%; border-radius: 0; }
+  .proj.open .pop-pic { opacity: 1; scale: 1; rotate: -5deg; transition: opacity 160ms ease 80ms, scale 700ms var(--bouncy) 80ms, rotate 700ms var(--bouncy) 80ms; }
+  .pop-pic.tinted { background: var(--t-soft); }
+
+  .pop .st { opacity: 0; translate: 0 8px; transition: opacity 120ms ease, translate 160ms ease; }
+  .proj.open .pop .st { opacity: 1; translate: 0 0; transition: opacity 220ms ease var(--w), translate 520ms var(--bouncy) var(--w); }
+  .pop-title {
+    display: block; font-size: 24px; font-weight: 900; line-height: 1.1; letter-spacing: -0.01em; color: var(--t-c);
+    text-shadow: 1px 2px 0 var(--t-lip); --w: 120ms;
+  }
+  .proj.itch .pop-title { text-shadow: 1px 2px 0 var(--blue-lip); }
+  .pop-tag { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; color: var(--t-ink); background: var(--t-soft); padding: 1px 8px; border-radius: 999px; --w: 160ms; }
+  .pop-desc { margin: 8px 2px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); line-height: 1.45; --w: 200ms; }
+  .pop-rows { margin: 10px 2px 0; display: grid; gap: 5px; --w: 240ms; }
+  .pop-row { display: grid; grid-template-columns: 78px 1fr; align-items: baseline; font-size: 14px; font-weight: 800; }
+  .pop-row a { text-decoration: underline 2.5px transparent; text-underline-offset: 3px; transition: text-decoration-color 140ms ease; overflow-wrap: anywhere; }
+  .pop-row a:hover { text-decoration-color: var(--t-c); }
+  .pop-row .k2 { font-size: 12px; font-weight: 800; color: var(--ink-2); }
+  .pop-foot { margin-top: 14px; display: flex; align-items: center; gap: 10px; --w: 290ms; }
+  .go {
+    display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 21px; text-decoration: none; margin-bottom: 5px;
+    font-size: 15px; font-weight: 900; color: var(--ink);
+    background: var(--t-c); box-shadow: 0 5px 0 var(--t-lip);
+    transition: translate 180ms var(--bouncy), box-shadow 180ms var(--bouncy);
+  }
+  .go:hover { translate: 0 -1px; box-shadow: 0 6px 0 var(--t-lip); }
+  .go:active { translate: 0 4px; box-shadow: 0 1px 0 var(--t-lip); }
+  .go svg { width: 16px; height: 16px; }
+  .pop-foot .url { font-size: 12.5px; font-weight: 700; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 5px; }
+
+  /* little terminal cursor inside the Empty Console icon */
+  .blink { animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* little star bursts from copies and likes */
+  .fx { position: fixed; z-index: 40; left: 0; top: 0; pointer-events: none; will-change: transform, opacity; }
+  .fx.twinkle { width: 18px; height: 18px; overflow: visible; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 22px; z-index: 50; translate: -50% 0;
+    padding: 10px 18px; border-radius: 18px; font-size: 14px; font-weight: 800; background: var(--ink); color: #fff;
+    box-shadow: 0 5px 0 #15172A; opacity: 0; scale: 0.6; pointer-events: none;
+    transition: opacity 150ms ease, scale 220ms var(--smooth);
+  }
+  .toast.on { opacity: 1; scale: 1; transition: opacity 140ms ease, scale 520ms var(--bouncy); }
+
+  .hint { position: fixed; z-index: 3; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; font-size: 12.5px; font-weight: 700; color: var(--ink-2); opacity: 0.8; animation: rise 700ms var(--bouncy) 1200ms both; pointer-events: none; white-space: nowrap; }
+  /* ---------- small screens: stack, but still one screen tall ---------- */
+  @media (max-width: 720px) {
+    body { overflow-y: auto; }
+    main { height: auto; min-height: 100dvh; padding: 14px 12px 34px; }
+    .face { border-radius: 32px; }
+    .album { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; }
+    .more { width: auto; justify-self: center; justify-items: center; text-align: center; }
+    .album-title { font-size: 36px; }
+    .art-frame { --s: 230px; }
+    .more-note { font-size: 14px; }
+    .flip-tip { font-size: 12.5px; }
+    .top { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 12px; }
+    .pic { --s: 116px; }
+    h1 { padding-right: 0; font-size: 44px; }
+    .bio { font-size: 14px; line-height: 1.42; margin-top: 8px; }
+    .rows { justify-items: center; }
+    .row { grid-template-columns: auto auto; gap: 10px; font-size: 15px; }
+    .likes { justify-content: center; gap: 8px; }
+    .like { height: 32px; font-size: 13px; padding: 0 12px 0 8px; }
+    .copy-hint { display: none; }
+    main { padding-bottom: 18px; }
+    .projects { gap: 8px; }
+    .tile { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding: 10px 6px 9px; border-radius: 20px; }
+    .tile strong { font-size: 14px; }
+    .tile small { display: none; }
+    .tray-head { margin-bottom: 8px; }
+    .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
+    .tile .ico svg { width: 26px; height: 26px; }
+    .tray { padding: 10px; border-radius: 26px; }
+    .tray-head p { display: none; }
+    .hint { display: none; }
+  }
+  @media (max-height: 640px) and (min-width: 721px) {
+    .pic { --s: 140px; }
+    .bio { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+    .dots { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="dots" aria-hidden="true"></div>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<main>
+  <article class="card" aria-labelledby="name">
+   <div class="face front">
+    <div class="flip-wrap">
+      <button class="flip" type="button" aria-label="Flip the card"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a7.5 7.5 0 0 1 13.4-3.6"/><path d="M18.6 2.8v4h-4"/><path d="M19.5 14a7.5 7.5 0 0 1-13.4 3.6"/><path d="M5.4 21.2v-4h4"/></svg></span></button>
+      <span class="flip-tip" aria-hidden="true">Click me to flip!</span>
+    </div>
+
+    <div class="top">
+      <div class="pic-wrap">
+        <button class="pic" type="button" aria-label="Boop hucklberi">
+          <img src="avatar.webp" alt="hucklberi’s profile picture: a sleepy blond character peeking out with a star mask" width="256" height="256">
+        </button>
+      </div>
+
+      <div class="info">
+        <h1 id="name" aria-label="hucklberi"></h1>
+        <p class="bio">Hai!!! Call me hucklberi or hf! I like coding websites, apps, and video games! I build with my team Empty Console and love making small fun tools. Send me a message!</p>
+
+        <div class="rows">
+          <div class="row"><span class="k discord">Discord</span><button class="v copy" type="button" data-copy="basicallyahucklberi">basicallyahucklberi<span class="copy-hint">Copy</span></button></div>
+          <div class="row"><span class="k email">Email</span><button class="v copy" type="button" data-copy="hfanggamedev@gmail.com">hfanggamedev@gmail.com<span class="copy-hint">Copy</span></button></div>
+          <div class="row"><span class="k github">GitHub</span><a class="v" href="https://github.com/HFang1012" target="_blank" rel="noopener">HFang1012<span class="copy-hint go-hint">GitHub<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></span></a></div>
+        </div>
+
+        <div class="likes" role="list" aria-label="Things I like">
+          <button class="like blue" type="button" role="listitem">
+            <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/></svg></span>Coding</button>
+          <button class="like purple" type="button" role="listitem">
+            <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg></span>Music</button>
+          <button class="like yellow" type="button" role="listitem">
+            <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></span>Game dev</button>
+          <button class="like blue" type="button" role="listitem">
+            <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.9 6l-.6 3a2.6 2.6 0 0 1-4.5 1.2L15 15H9l-1.8 2.2a2.6 2.6 0 0 1-4.5-1.2l-.6-3A5 5 0 0 1 7 7z"/><path d="M8 10v3M6.5 11.5h3"/><circle cx="16" cy="11" r="0.6" fill="currentColor"/></svg></span>Gaming</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="tray" aria-labelledby="made">
+      <div class="tray-head"><h2 id="made">Things I make</h2><p>Hover or tap one for a closer look</p></div>
+      <div class="projects">
+
+        <div class="proj pane" style="--d:760ms">
+          <button class="tile" type="button" aria-expanded="false" aria-controls="pop-pane">
+            <span class="ico"><img src="https://hfang1012.github.io/Pane-Mac/icon.png" alt="" width="52" height="52"></span>
+            <span><strong>Pane</strong><small>Small tools for your Mac</small></span>
+          </button>
+          <div class="pop" id="pop-pane" role="group" aria-label="About Pane">
+            <div class="pop-head">
+              <span class="pop-pic"><img src="https://hfang1012.github.io/Pane-Mac/icon.png" alt="" width="64" height="64"></span>
+              <span><strong class="pop-title st">Pane</strong><span class="pop-tag st">Mac app</span></span>
+            </div>
+            <p class="pop-desc st">Five small tools for your Mac, each a shortcut away. Draw on your screen, step away, and more. You can change any shortcut to keys you like.</p>
+            <div class="pop-rows st">
+              <div class="pop-row"><span class="k2">Runs on</span><span>Macs with Apple silicon</span></div>
+              <div class="pop-row"><span class="k2">Price</span><span>Free and open source</span></div>
+            </div>
+            <div class="pop-foot st">
+              <a class="go" href="https://hfang1012.github.io/Pane-Mac/" target="_blank" rel="noopener">Get Pane
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></a>
+              <span class="url">hfang1012.github.io/Pane-Mac</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj team" style="--d:840ms">
+          <button class="tile" type="button" aria-expanded="false" aria-controls="pop-team">
+            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="22" rx="6" fill="#fff" stroke="#5A6CC4" stroke-width="2.5"/><path d="M9 13l4 3-4 3" fill="none" stroke="#3D4FAE" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect class="blink" x="15" y="18" width="7" height="2.6" rx="1.3" fill="#3D4FAE"/></svg></span>
+            <span><strong>Empty Console</strong><small>The team I build with</small></span>
+          </button>
+          <div class="pop" id="pop-team" role="group" aria-label="About Empty Console">
+            <div class="pop-head">
+              <span class="pop-pic tinted"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="22" rx="6" fill="#fff" stroke="#5A6CC4" stroke-width="2.5"/><path d="M9 13l4 3-4 3" fill="none" stroke="#3D4FAE" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect class="blink" x="15" y="18" width="7" height="2.6" rx="1.3" fill="#3D4FAE"/></svg></span>
+              <span><strong class="pop-title st">Empty Console</strong><span class="pop-tag st">My team</span></span>
+            </div>
+            <p class="pop-desc st">Four of us making projects together: emey, shyguy, automagicle, and me.</p>
+            <div class="pop-rows st">
+              <div class="pop-row"><span class="k2">Projects</span><span>Student Atlas, Hestia</span></div>
+              <div class="pop-row"><span class="k2">Me</span><a href="mailto:hfanggamedev@gmail.com">hfanggamedev@gmail.com</a></div>
+            </div>
+            <div class="pop-foot st">
+              <a class="go" href="https://www.emptyconsole.com/" target="_blank" rel="noopener">Meet the team
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></a>
+              <span class="url">emptyconsole.com</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj itch" style="--d:920ms">
+          <button class="tile" type="button" aria-expanded="false" aria-controls="pop-itch">
+            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 9h12a7 7 0 0 1 6.8 8.6l-.8 3.4a3.2 3.2 0 0 1-5.5 1.4L20 20h-8l-2.5 2.4A3.2 3.2 0 0 1 4 21l-.8-3.4A7 7 0 0 1 10 9z" fill="#fff" stroke="#E9A93A" stroke-width="2.5" stroke-linejoin="round"/><path d="M10.5 12.5v5M8 15h5" stroke="#9A6A00" stroke-width="2.4" stroke-linecap="round"/><circle cx="21" cy="13.6" r="1.6" fill="#7C8FE0"/><circle cx="23.6" cy="16.6" r="1.6" fill="#B9A5F4"/></svg></span>
+            <span><strong>itch.io</strong><small>My games and jams</small></span>
+          </button>
+          <div class="pop" id="pop-itch" role="group" aria-label="About my itch.io page">
+            <div class="pop-head">
+              <span class="pop-pic tinted"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 9h12a7 7 0 0 1 6.8 8.6l-.8 3.4a3.2 3.2 0 0 1-5.5 1.4L20 20h-8l-2.5 2.4A3.2 3.2 0 0 1 4 21l-.8-3.4A7 7 0 0 1 10 9z" fill="#fff" stroke="#E9A93A" stroke-width="2.5" stroke-linejoin="round"/><path d="M10.5 12.5v5M8 15h5" stroke="#9A6A00" stroke-width="2.4" stroke-linecap="round"/><circle cx="21" cy="13.6" r="1.6" fill="#7C8FE0"/><circle cx="23.6" cy="16.6" r="1.6" fill="#B9A5F4"/></svg></span>
+              <span><strong class="pop-title st">HF_ang on itch.io</strong><span class="pop-tag st">Games</span></span>
+            </div>
+            <p class="pop-desc st">Metroidvanias, platformers, and puzzles, mostly from game jams. I try to do a small one every month.</p>
+            <div class="pop-rows st">
+              <div class="pop-row"><span class="k2">Latest</span><span>Switch-Blade</span></div>
+              <div class="pop-row"><span class="k2">Play in</span><span>Your browser</span></div>
+            </div>
+            <div class="pop-foot st">
+              <a class="go" href="https://hf-ang.itch.io/" target="_blank" rel="noopener">Play my games
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></a>
+              <span class="url">hf-ang.itch.io</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+   </div>
+   <div class="face back" inert>
+    <div class="flip-wrap"><button class="flip" type="button" aria-label="Flip back to the front"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a7.5 7.5 0 0 1 13.4-3.6"/><path d="M18.6 2.8v4h-4"/><path d="M19.5 14a7.5 7.5 0 0 1-13.4 3.6"/><path d="M5.4 21.2v-4h4"/></svg></span></button></div>
+    <div class="album">
+      <figure class="art">
+        <button class="art-frame" type="button" aria-label="Wiggle the drawing"><img src="photos/sleepy.webp" alt="A sleepy dark-haired character in a blue shirt, yawning, with a tiny blond star-masked buddy peeking from the pocket" width="600" height="600"></button>
+        <figcaption class="credit">by Ryn</figcaption>
+      </figure>
+      <div class="more">
+        <h2 class="album-title">A bit more of me!</h2>
+        <p class="more-note"><span class="line">I'm pretty introverted...</span> <span class="line">But I still love meeting new people!</span> <span class="line">I love mental health too!!!</span></p>
+      </div>
+    </div>
+   </div>
+  </article>
+</main>
+
+<p class="hint" aria-hidden="true">Click anywhere in the sky to make stars</p>
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hoverable = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const COLORS = [
+    { c: '#FFD45C', lip: '#E9A93A' },
+    { c: '#7C8FE0', lip: '#5A6CC4' },
+    { c: '#B9A5F4', lip: '#8E76DC' },
+  ];
+
+  /* ---------- name: one span per letter, so each can hop ---------- */
+  const h1 = document.getElementById('name');
+  [...'hucklberi'].forEach((ch, i) => {
+    const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; s.setAttribute('aria-hidden', 'true');
+    h1.append(s);
+  });
+  const wave = () => {
+    if (reduce) return;
+    h1.querySelectorAll('.ch').forEach((s, i) => s.animate(
+      [{ translate: '0 0' }, { translate: '0 -12px' }, { translate: '0 0' }],
+      { duration: 560, delay: i * 45, easing: 'cubic-bezier(.3,.7,.4,1)' }));
+  };
+  setTimeout(wave, 1100);
+
+  /* ---------- toast ---------- */
+  const toast = document.querySelector('.toast'); let toastT;
+  const say = (msg) => { toast.textContent = msg; toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 1600); };
+
+  /* ---------- copy Discord ---------- */
+  document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(b.dataset.copy); } catch { /* clipboard blocked: still say what to copy */ }
+    b.classList.add('done'); b.querySelector('.copy-hint').textContent = 'Copied';
+    say('Copied ' + b.dataset.copy);
+    burst(b.getBoundingClientRect(), 8);
+    setTimeout(() => { b.classList.remove('done'); b.querySelector('.copy-hint').textContent = 'Copy'; }, 1600);
+  }));
+
+  /* ---------- likes ---------- */
+  document.querySelectorAll('.like').forEach((b) => b.addEventListener('click', () => {
+    b.classList.remove('spin'); void b.offsetWidth; b.classList.add('spin');
+    burst(b.getBoundingClientRect(), 6);
+  }));
+
+  /* ---------- avatar: a click jiggles it outward (like the project popups) and shakes each letter ---------- */
+  const pic = document.querySelector('.pic');
+  const restart = (el) => el.getAnimations().forEach((a) => a instanceof CSSAnimation || a instanceof CSSTransition || a.cancel());
+  pic.addEventListener('click', () => {
+    if (reduce) return;
+    restart(pic);
+    // same curve as the popup shake, wobbling around the picture's resting -5deg tilt
+    pic.animate([
+      { scale: '1', rotate: '-5deg' },
+      { scale: '1.09', rotate: '-9deg', offset: 0.18 },
+      { scale: '1.06', rotate: '-1.5deg', offset: 0.36 },
+      { scale: '1.04', rotate: '-7.5deg', offset: 0.54 },
+      { scale: '1.02', rotate: '-3.8deg', offset: 0.72 },
+      { scale: '1', rotate: '-5deg' },
+    ], { duration: 520, easing: 'cubic-bezier(.3,.7,.4,1)' });
+    // each letter gets its own little shake, rippling left to right; alternate letters lean opposite ways
+    h1.querySelectorAll('.ch').forEach((ch, i) => {
+      restart(ch);
+      const d = i % 2 ? -1 : 1;
+      ch.animate([
+        { translate: '0 0', scale: '1', rotate: '0deg' },
+        { translate: '0 -9px', scale: '1.18', rotate: `${12 * d}deg`, offset: 0.2 },
+        { translate: '0 -4px', scale: '1.1', rotate: `${-9 * d}deg`, offset: 0.4 },
+        { translate: '0 -2px', scale: '1.05', rotate: `${6 * d}deg`, offset: 0.6 },
+        { translate: '0 0', scale: '1.02', rotate: `${-3 * d}deg`, offset: 0.8 },
+        { translate: '0 0', scale: '1', rotate: '0deg' },
+      ], { duration: 560, delay: i * 40, easing: 'cubic-bezier(.3,.7,.4,1)' });
+    });
+  });
+
+
+  /* ---------- project popups ---------- */
+  const projs = [...document.querySelectorAll('.proj')];
+  const close = (p) => { p.classList.remove('open'); p.querySelector('.tile').setAttribute('aria-expanded', 'false'); };
+  const open = (p) => {
+    projs.forEach((o) => o !== p && close(o));
+    const pop = p.querySelector('.pop');
+    // keep the popup on screen: nudge it sideways, the arrow stays on the tile
+    pop.style.setProperty('--shift', '0px');
+    // walk offsetLeft (layout position) rather than getBoundingClientRect, so a running scale/rotate animation can't skew it
+    let x = 0; for (let el = p; el; el = el.offsetParent) x += el.offsetLeft;
+    const vw = document.documentElement.clientWidth, w = Math.min(360, vw - 32);
+    const left = x + p.offsetWidth / 2 - w / 2, right = left + w;
+    let shift = 0;
+    if (left < 16) shift = 16 - left; else if (right > vw - 16) shift = vw - 16 - right;
+    pop.style.setProperty('--shift', shift + 'px');
+    p.classList.add('open'); p.querySelector('.tile').setAttribute('aria-expanded', 'true');
+  };
+  // animates scale and rotate only: .pop's translate holds its on-screen position, so it's left alone
+  const shake = (p) => {
+    if (reduce) return;
+    const pop = p.querySelector('.pop');
+    pop.getAnimations().forEach((a) => a instanceof CSSTransition || a.cancel());
+    pop.animate([
+      { scale: '1', rotate: '0deg' },
+      { scale: '1.09', rotate: '-4deg', offset: 0.18 },
+      { scale: '1.06', rotate: '3.5deg', offset: 0.36 },
+      { scale: '1.04', rotate: '-2.5deg', offset: 0.54 },
+      { scale: '1.02', rotate: '1.2deg', offset: 0.72 },
+      { scale: '1', rotate: '0deg' },
+    ], { duration: 520, easing: 'cubic-bezier(.3,.7,.4,1)' });
+    burst(p.querySelector('.tile .ico').getBoundingClientRect(), 5);
+  };
+  projs.forEach((p) => {
+    const tile = p.querySelector('.tile'); let t;
+    // clicking an open tile never closes it: the popup jiggles outward instead (close with Escape or a click elsewhere)
+    tile.addEventListener('click', () => p.classList.contains('open') ? shake(p) : open(p));
+    if (hoverable) {
+      p.addEventListener('pointerenter', () => { clearTimeout(t); t = setTimeout(() => open(p), 90); });
+      p.addEventListener('pointerleave', () => { clearTimeout(t); t = setTimeout(() => close(p), 160); });
+    }
+    p.addEventListener('focusout', (e) => { if (!p.contains(e.relatedTarget)) close(p); });
+  });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') projs.forEach((p) => { if (p.classList.contains('open')) { close(p); p.querySelector('.tile').focus(); } }); });
+  addEventListener('pointerdown', (e) => { if (!e.target.closest('.proj')) projs.forEach(close); });
+
+  /* ---------- little star bursts (DOM, so they sit above the card) ---------- */
+  const starSVG = (c, lip) => `<svg viewBox="0 0 40 40"><path d="M20 5 L24.1 14.3 L34.3 15.4 L26.7 22.2 L28.8 32.1 L20 27 L11.2 32.1 L13.3 22.2 L5.7 15.4 L15.9 14.3 Z" fill="${c}" stroke="${lip}" stroke-width="4" stroke-linejoin="round"/></svg>`;
+  function burst(r, n) {
+    if (reduce) return;
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (let i = 0; i < n; i++) {
+      const col = COLORS[i % 3], el = document.createElement('span');
+      el.className = 'fx twinkle'; el.innerHTML = starSVG(col.c, col.lip); document.body.append(el);
+      const a = (i / n) * Math.PI * 2 + Math.random() * 0.5, d = 50 + Math.random() * 50 + Math.max(r.width, r.height) * 0.35;
+      const s = 0.6 + Math.random() * 0.6;
+      el.animate([
+        { transform: `translate(${cx - 9}px, ${cy - 9}px) scale(0.2) rotate(0deg)`, opacity: 1 },
+        { transform: `translate(${cx - 9 + Math.cos(a) * d}px, ${cy - 9 + Math.sin(a) * d}px) scale(${s}) rotate(${180 + Math.random() * 180}deg)`, opacity: 1, offset: 0.7 },
+        { transform: `translate(${cx - 9 + Math.cos(a) * d * 1.1}px, ${cy - 9 + Math.sin(a) * d * 1.1 + 14}px) scale(0) rotate(360deg)`, opacity: 0 },
+      ], { duration: 800 + Math.random() * 300, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => el.remove();
+    }
+  }
+  /* ---------- flipping the card ---------- */
+  const card = document.querySelector('.card');
+  const front = card.querySelector('.front'), back = card.querySelector('.back');
+  const [frontFlip, backFlip] = card.querySelectorAll('.flip');
+  const frontWrap = frontFlip.parentElement;
+  // the "Click me to flip!" bubble shows itself once the card has landed, until the first flip
+  const tipT = setTimeout(() => frontWrap.classList.add('tip'), 1500);
+  let flying = false;
+  const FLIGHT = 1250, EDGE_ON = 0.46; // EDGE_ON: the point in the flight where the card is side-on (90deg)
+  // shows one face: only the face you can see takes clicks and keyboard focus
+  const showFace = (on) => {
+    card.classList.toggle('flipped', on);
+    front.inert = on; back.inert = !on;
+    if (on) { back.classList.remove('arrive'); void back.offsetWidth; back.classList.add('arrive'); }
+  };
+  function setFlipped(on, btn) {
+    if (flying) return;
+    projs.forEach(close);
+    clearTimeout(tipT); frontWrap.classList.remove('tip');
+    const done = () => { (on ? backFlip : frontFlip).focus({ preventScroll: true }); if (!on) wave(); };
+    if (reduce) { showFace(on); done(); return; }
+    flying = true;
+    // the button sinks into the card first...
+    btn.animate([
+      { translate: '0 0', boxShadow: '0 5px 0 #BCC7F3' },
+      { translate: '0 5px', boxShadow: '0 0 0 #BCC7F3', offset: 0.45 },
+      { translate: '0 0', boxShadow: '0 5px 0 #BCC7F3' },
+    ], { duration: 320, easing: 'ease-out' });
+    // ...then the card dips (the push as it leaves), jumps up toward you, turns over in the air,
+    // and drops back into place with a bump as it lands
+    const a0 = on ? 0 : 180, a1 = on ? 180 : 0, at = (p) => a0 + (a1 - a0) * p;
+    const t = (y, deg, s) => `translateY(${y}px) rotateY(${deg}deg) scale(${s})`;
+    card.animate([
+      { offset: 0,       transform: t(0, a0, 1),          easing: 'ease-out' },
+      { offset: 0.12,    transform: t(9, a0, 0.95),       easing: 'cubic-bezier(.3,0,.3,1)' },
+      { offset: 0.30,    transform: t(-36, at(0.1), 1.08), easing: 'ease-in-out' },
+      { offset: EDGE_ON, transform: t(-44, at(0.5), 1.1),  easing: 'ease-in-out' },
+      { offset: 0.64,    transform: t(-30, at(1.05), 1.07), easing: 'cubic-bezier(.5,0,.8,.6)' },
+      { offset: 0.79,    transform: t(8, a1, 0.95),       easing: 'ease-out' },
+      { offset: 0.90,    transform: t(-3, a1, 1.015),     easing: 'ease-in-out' },
+      { offset: 1,       transform: t(0, a1, 1) },
+    ], { duration: FLIGHT });
+    setTimeout(() => showFace(on), FLIGHT * EDGE_ON);
+    setTimeout(() => { flying = false; done(); }, FLIGHT);
+  }
+  frontFlip.addEventListener('click', () => setFlipped(true, frontFlip));
+  backFlip.addEventListener('click', () => setFlipped(false, backFlip));
+
+  /* ---------- the back's drawing: a click wobbles it around its own tilt, never straightening it ---------- */
+  back.querySelectorAll('.art-frame').forEach((el) => el.addEventListener('click', () => {
+    if (reduce) return;
+    const base = parseFloat(getComputedStyle(el).rotate) || 0;
+    restart(el);
+    el.animate([
+      { scale: '1',    rotate: `${base}deg` },
+      { scale: '1.07', rotate: `${base - 4}deg`, offset: 0.2 },
+      { scale: '1.05', rotate: `${base + 3.5}deg`, offset: 0.4 },
+      { scale: '1.03', rotate: `${base - 2}deg`, offset: 0.6 },
+      { scale: '1.01', rotate: `${base + 1}deg`, offset: 0.8 },
+      { scale: '1',    rotate: `${base}deg` },
+    ], { duration: 520, easing: 'cubic-bezier(.3,.7,.4,1)' });
+  }));
+
+  /* ---------- the sky: rounded shapes drifting up, nudged by the cursor ---------- */
+  const canvas = document.getElementById('sky'), ctx = canvas.getContext('2d');
+  const sky = { items: [], pops: [] };
+  const TINTS = ['#FFE79E', '#C9D3F7', '#DCD1FB', '#FFF0C4', '#D6DDF9'];
+  const KINDS = ['star', 'star', 'circle', 'plus', 'square', 'ring'];
+  let W, H, dpr, mouse = { x: -9999, y: -9999 };
+  function resize() {
+    dpr = Math.min(devicePixelRatio || 1, 2); W = document.documentElement.clientWidth; H = document.documentElement.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const want = Math.round(Math.min(34, (W * H) / 38000));
+    while (sky.items.length < want) sky.items.push(spawn(true));
+    sky.items.length = want;
+  }
+  function spawn(anywhere) {
+    return {
+      x: Math.random() * W, y: anywhere ? Math.random() * H : H + 40,
+      r: 8 + Math.random() * 16, kind: KINDS[(Math.random() * KINDS.length) | 0],
+      color: TINTS[(Math.random() * TINTS.length) | 0],
+      vy: 0.12 + Math.random() * 0.22, sway: Math.random() * Math.PI * 2, swayS: 0.004 + Math.random() * 0.006,
+      rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.006, ox: 0, oy: 0, kx: 0, ky: 0, ks: 0, tw: Math.random() * Math.PI * 2,
+    };
+  }
+  function starPath(r, inner = 0.5) {
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const a = -Math.PI / 2 + (i * Math.PI) / 5, rr = i % 2 ? r * inner : r;
+      i ? ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr);
+    }
+    ctx.closePath();
+  }
+  function roundRect(s, rad) {
+    ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-s, -s, s * 2, s * 2, rad) : ctx.rect(-s, -s, s * 2, s * 2);
+  }
+  function drawShape(it, scale = 1) {
+    const r = it.r * scale;
+    ctx.fillStyle = it.color; ctx.strokeStyle = it.color; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    switch (it.kind) {
+      case 'star': starPath(r * 0.85); ctx.lineWidth = r * 0.45; ctx.stroke(); ctx.fill(); break; // thick round stroke = soft rounded points
+      case 'circle': ctx.beginPath(); ctx.arc(0, 0, r * 0.7, 0, Math.PI * 2); ctx.fill(); break;
+      case 'ring': ctx.beginPath(); ctx.arc(0, 0, r * 0.7, 0, Math.PI * 2); ctx.lineWidth = r * 0.32; ctx.stroke(); break;
+      case 'plus': ctx.lineWidth = r * 0.42; ctx.beginPath(); ctx.moveTo(-r * 0.7, 0); ctx.lineTo(r * 0.7, 0); ctx.moveTo(0, -r * 0.7); ctx.lineTo(0, r * 0.7); ctx.stroke(); break;
+      case 'square': roundRect(r * 0.62, r * 0.32); ctx.fill(); break;
+    }
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    for (const it of sky.items) {
+      if (!reduce) {
+        it.y -= it.vy; it.sway += it.swayS; it.rot += it.vr; it.tw += 0.03;
+        // the cursor gently pushes shapes aside, and they ease back
+        const dx = it.x + it.ox - mouse.x, dy = it.y + it.oy - mouse.y, d2 = dx * dx + dy * dy, R = 130;
+        if (d2 < R * R) { const d = Math.sqrt(d2) || 1, f = (1 - d / R) * 3.2; it.ox += (dx / d) * f; it.oy += (dy / d) * f; }
+        // a click's knock adds velocity that dies off; the 0.94 pull then eases each shape back onto its path
+        it.ox += it.kx; it.oy += it.ky; it.rot += it.ks;
+        it.kx *= 0.9; it.ky *= 0.9; it.ks *= 0.92;
+        it.ox *= 0.94; it.oy *= 0.94;
+        if (it.y < -40) Object.assign(it, spawn(false));
+      }
+      ctx.save(); ctx.translate(it.x + it.ox + Math.sin(it.sway) * 14, it.y + it.oy); ctx.rotate(it.rot); drawShape(it); ctx.restore();
+    }
+    // stars made by clicking the sky
+    for (let i = sky.pops.length - 1; i >= 0; i--) {
+      const p = sky.pops[i]; p.t += 1; p.x += p.vx; p.y += p.vy; p.vx *= 0.95; p.vy = p.vy * 0.95 - 0.02; p.rot += p.vr;
+      const life = 1 - p.t / p.max; if (life <= 0) { sky.pops.splice(i, 1); continue; }
+      const grow = Math.min(1, p.t / 8);
+      ctx.save(); ctx.globalAlpha = Math.min(1, life * 1.6); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      starPath(p.r * grow * (0.6 + life * 0.4)); ctx.lineWidth = p.r * 0.5; ctx.strokeStyle = p.lip; ctx.fillStyle = p.c;
+      ctx.lineJoin = 'round'; ctx.stroke(); ctx.fill(); ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // any click knocks nearby shapes outward
+  addEventListener('pointerdown', (e) => {
+    if (reduce) return;
+    for (const it of sky.items) {
+      const dx = it.x + it.ox + Math.sin(it.sway) * 14 - e.clientX, dy = it.y + it.oy - e.clientY, d = Math.hypot(dx, dy) || 1, R = 240;
+      if (d < R) { const f = (1 - d / R) * 16; it.kx += (dx / d) * f; it.ky += (dy / d) * f; it.ks += (Math.random() - 0.5) * 0.25; }
+    }
+  });
+  addEventListener('resize', resize);
+  addEventListener('pointermove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+  // clicks that land on the sky (not on the card) scatter a handful of stars
+  addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.card')) return;
+    const n = 7;
+    for (let i = 0; i < n; i++) {
+      const col = COLORS[(Math.random() * 3) | 0], a = (i / n) * Math.PI * 2 + Math.random() * 0.4, sp = 2.4 + Math.random() * 2.6;
+      sky.pops.push({ x: e.clientX, y: e.clientY, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: 6 + Math.random() * 6, rot: Math.random() * 3, vr: (Math.random() - 0.5) * 0.2, t: 0, max: 55 + Math.random() * 25, c: col.c, lip: col.lip });
+    }
+  });
+  resize(); frame();
+})();
+</script>
+</body>
+</html>
