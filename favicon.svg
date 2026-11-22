@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- a bubbly "<_": drawn as fat round-capped strokes (favicons can't load web fonts),
+  <!-- a bubbly "h": drawn as fat round-capped strokes (favicons can't load web fonts),
        yellow over a chunky blue outline with a hard drop, like the name on the page -->
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <g stroke="#5A6CC4" stroke-width="15" transform="translate(1.5 3)">
-      <path d="M27 8 L10 25 L27 42"/>
-      <path d="M40 52 L53 52"/>
+    <g stroke="#5A6CC4" stroke-width="16" transform="translate(1.5 3)">
+      <path d="M20 9 L20 51"/>
+      <path d="M20 37 C20 22 44 22 44 37 L44 51"/>
     </g>
-    <g stroke="#7186EC" stroke-width="15">
-      <path d="M27 8 L10 25 L27 42"/>
-      <path d="M40 52 L53 52"/>
+    <g stroke="#7186EC" stroke-width="16">
+      <path d="M20 9 L20 51"/>
+      <path d="M20 37 C20 22 44 22 44 37 L44 51"/>
     </g>
-    <g stroke="#FFDB4D" stroke-width="8.5">
-      <path d="M27 8 L10 25 L27 42"/>
-      <path d="M40 52 L53 52"/>
+    <g stroke="#FFDB4D" stroke-width="9">
+      <path d="M20 9 L20 51"/>
+      <path d="M20 37 C20 22 44 22 44 37 L44 51"/>
     </g>
   </g>
 </svg>
