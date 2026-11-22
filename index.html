@@ -317,7 +317,6 @@
     display: block; font-size: 24px; font-weight: 900; line-height: 1.1; letter-spacing: -0.01em; color: var(--t-c);
     text-shadow: 1px 2px 0 var(--t-lip); --w: 120ms;
   }
-  .proj.itch .pop-title { text-shadow: 1px 2px 0 var(--blue-lip); }
   .pop-tag { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; color: var(--t-ink); background: var(--t-soft); padding: 1px 8px; border-radius: 999px; --w: 160ms; }
   .pop-desc { margin: 8px 2px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); line-height: 1.45; --w: 200ms; }
   .pop-rows { margin: 10px 2px 0; display: grid; gap: 5px; --w: 240ms; }
@@ -839,9 +838,9 @@
     requestAnimationFrame(frame);
   }
 
-  // any click knocks nearby shapes outward
+  // clicks on the sky (not on the card) knock nearby shapes outward
   addEventListener('pointerdown', (e) => {
-    if (reduce) return;
+    if (reduce || e.target.closest('.card')) return;
     for (const it of sky.items) {
       const dx = it.x + it.ox + Math.sin(it.sway) * 14 - e.clientX, dy = it.y + it.oy - e.clientY, d = Math.hypot(dx, dy) || 1, R = 240;
       if (d < R) { const f = (1 - d / R) * 16; it.kx += (dx / d) * f; it.ky += (dy / d) * f; it.ks += (Math.random() - 0.5) * 0.25; }
