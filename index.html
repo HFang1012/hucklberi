@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>hucklberi</title>
 <meta name="description" content="hucklberi (hf) codes websites, apps, and video games, and builds with the team Empty Console.">
-<link rel="icon" href="avatar.webp">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="180x180">
+<link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -177,7 +179,13 @@
   .like.purple { --c-soft: var(--purple-soft); --c-ink: var(--purple-ink); --c-lip: #D5C8FA; }
 
   /* ---------- the flip button, top right of each face ---------- */
-  .flip-wrap { position: absolute; top: clamp(18px, 3vh, 26px); right: clamp(18px, 3vw, 26px); z-index: 5; }
+  /* a row: [bubble] [button]. The bubble lives inside the row's box rather than hanging outside it,
+     because Safari clips overflowing children of 3D-transformed cards down to a thin sliver */
+  .flip-wrap {
+    position: absolute; top: clamp(18px, 3vh, 26px); right: clamp(18px, 3vw, 26px); z-index: 5;
+    display: flex; flex-direction: row-reverse; align-items: center; gap: 16px; pointer-events: none;
+  }
+  .flip-wrap .flip { pointer-events: auto; }
   .flip {
     display: grid; place-items: center; width: 50px; height: 50px; border-radius: 17px; color: var(--blue-ink);
     background: var(--blue-soft); box-shadow: 0 5px 0 #BCC7F3;
@@ -193,14 +201,14 @@
 
   /* "Click me to flip!": a yellow speech bubble whose little arrow points at the button */
   .flip-tip {
-    position: absolute; right: calc(100% + 16px); top: 50%; margin-top: -19px; height: 34px; line-height: 32px; padding: 0 13px;
+    position: relative; top: -2px; flex: none; height: 34px; line-height: 32px; padding: 0 13px;
     white-space: nowrap; font-size: 13.5px; font-weight: 900; color: var(--yellow-ink);
     background: var(--yellow-soft); border-radius: 14px; box-shadow: 0 0 0 2px #F7E2A8, 0 3px 0 2px #F7E2A8;
     pointer-events: none; transform-origin: calc(100% + 16px) 50%;
     opacity: 0; scale: 0.4; rotate: 6deg;
     transition: opacity 140ms ease, scale 220ms var(--smooth), rotate 220ms var(--smooth);
   }
-  .flip-wrap.tip .flip-tip, .flip-wrap:hover .flip-tip, .flip-wrap:has(.flip:focus-visible) .flip-tip {
+  .flip-wrap.tip .flip-tip, .flip-wrap:has(.flip:hover) .flip-tip, .flip-wrap:has(.flip:focus-visible) .flip-tip {
     opacity: 1; scale: 1; rotate: 0deg;
     transition: opacity 140ms ease, scale 620ms var(--bouncy), rotate 620ms var(--bouncy);
   }
