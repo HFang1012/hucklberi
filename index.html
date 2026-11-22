@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>hucklberi</title>
 <meta name="description" content="hucklberi (hf) codes websites, apps, and video games, and builds with the team Empty Console.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon.png" type="image/png" sizes="180x180">
-<link rel="apple-touch-icon" href="favicon.png">
+<link rel="icon" href="favicon.svg?v=3" type="image/svg+xml">
+<link rel="icon" href="favicon.png?v=3" type="image/png" sizes="180x180">
+<link rel="apple-touch-icon" href="favicon.png?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -180,11 +180,11 @@
   .like.purple { --c-soft: var(--purple-soft); --c-ink: var(--purple-ink); --c-lip: #D5C8FA; }
 
   /* ---------- the flip button, top right of each face ---------- */
-  /* a row: [bubble] [button]. The bubble lives inside the row's box rather than hanging outside it,
+  /* a column: [button] over [popup]. The popup lives inside this box rather than hanging outside it,
      because Safari clips overflowing children of 3D-transformed cards down to a thin sliver */
   .flip-wrap {
     position: absolute; top: clamp(18px, 3vh, 26px); right: clamp(18px, 3vw, 26px); z-index: 5;
-    display: flex; flex-direction: row-reverse; align-items: center; gap: 16px; pointer-events: none;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 18px; pointer-events: none;
   }
   .flip-wrap .flip { pointer-events: auto; }
   .flip {
@@ -200,31 +200,32 @@
   .flip .fi svg { display: block; width: 100%; height: 100%; }
   .flip:hover .fi { rotate: 180deg; }
 
-  /* "Click me to flip!": a yellow speech bubble whose little arrow points at the button */
+  /* "Click me to flip!": a little card that drops from under the button, its arrow pointing up at it */
   .flip-tip {
-    position: relative; top: -2px; flex: none; height: 34px; line-height: 32px; padding: 0 13px;
-    white-space: nowrap; font-size: 13.5px; font-weight: 900; color: var(--yellow-ink);
-    isolation: isolate; pointer-events: none; transform-origin: calc(100% + 16px) 50%;
-    opacity: 0; scale: 0.4; rotate: 6deg;
+    position: relative; display: grid; gap: 1px; padding: 10px 14px 11px; text-align: left; white-space: nowrap;
+    isolation: isolate; pointer-events: none;
+    transform-origin: calc(100% - 25px) -12px; /* grows out of the arrow's tip */
+    opacity: 0; scale: 0.5; rotate: -5deg;
     transition: opacity 140ms ease, scale 220ms var(--smooth), rotate 220ms var(--smooth);
   }
+  .flip-tip strong { font-size: 14.5px; font-weight: 900; color: var(--blue-ink); line-height: 1.25; }
+  .flip-tip small { font-size: 12.5px; font-weight: 700; color: var(--ink-2); line-height: 1.3; }
   .flip-wrap.tip .flip-tip, .flip-wrap:has(.flip:hover) .flip-tip, .flip-wrap:has(.flip:focus-visible) .flip-tip {
     opacity: 1; scale: 1; rotate: 0deg;
     transition: opacity 140ms ease, scale 620ms var(--bouncy), rotate 620ms var(--bouncy);
   }
-  .flip-wrap.tip .flip-tip { animation: tip-bob 2.4s ease-in-out 800ms infinite; }
-  @keyframes tip-bob { 50% { translate: -4px 0; } }
-  /* the bubble's body and arrow are one shape behind the text. Zero-radius drop-shadows trace the
-     outline of that combined shape, so the edge and the bottom shadow run around the arrow without a seam
-     (box-shadow can't: it only follows each box separately). No blur anywhere. */
+  .flip-wrap.tip .flip-tip { animation: tip-bob 2.6s ease-in-out 800ms infinite; }
+  @keyframes tip-bob { 50% { translate: 0 4px; } }
+  /* body and arrow are one shape behind the text; zero-blur drop-shadows trace that whole shape,
+     so the outline and the bottom lip run around the arrow with no seam */
   .tip-bg {
-    position: absolute; inset: 0; z-index: -1; border-radius: 14px; background: var(--yellow-soft);
-    filter: drop-shadow(2px 0 0 #F3D98F) drop-shadow(-2px 0 0 #F3D98F) drop-shadow(0 -2px 0 #F3D98F) drop-shadow(0 2px 0 #F3D98F)
-            drop-shadow(0 4px 0 #E9C266);
+    position: absolute; inset: 0; z-index: -1; border-radius: 18px; background: #F5F7FF;
+    filter: drop-shadow(2px 0 0 #D3DAF6) drop-shadow(-2px 0 0 #D3DAF6) drop-shadow(0 -2px 0 #D3DAF6) drop-shadow(0 2px 0 #D3DAF6)
+            drop-shadow(0 5px 0 #BCC7F3);
   }
-  .tip-bg::after {
-    content: ""; position: absolute; right: -6px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 3px;
-    background: var(--yellow-soft); transform: rotate(45deg);
+  .tip-bg::after { /* the arrow, centred under the 50px button */
+    content: ""; position: absolute; top: -7px; right: 18px; width: 15px; height: 15px; border-radius: 4px;
+    background: #F5F7FF; transform: rotate(45deg);
   }
 
   /* ---------- projects tray ---------- */
@@ -348,7 +349,6 @@
     .album-title { font-size: 36px; }
     .art-frame { --s: 230px; }
     .more-note { font-size: 14px; }
-    .flip-tip { font-size: 12.5px; }
     .top { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 12px; }
     .pic { --s: 116px; }
     h1 { padding-right: 0; font-size: 44px; }
@@ -390,7 +390,7 @@
    <div class="face front">
     <div class="flip-wrap">
       <button class="flip" type="button" aria-label="Flip the card"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a7.5 7.5 0 0 1 13.4-3.6"/><path d="M18.6 2.8v4h-4"/><path d="M19.5 14a7.5 7.5 0 0 1-13.4 3.6"/><path d="M5.4 21.2v-4h4"/></svg></span></button>
-      <span class="flip-tip" aria-hidden="true"><span class="tip-bg"></span>Click me to flip!</span>
+      <span class="flip-tip" aria-hidden="true"><span class="tip-bg"></span><strong>Click me to flip!</strong><small>There's a bit more of me on the back</small></span>
     </div>
 
     <div class="top">
@@ -660,7 +660,11 @@
   const [frontFlip, backFlip] = card.querySelectorAll('.flip');
   const frontWrap = frontFlip.parentElement;
   // the "Click me to flip!" bubble shows itself once the card has landed, until the first flip
-  const tipT = setTimeout(() => frontWrap.classList.add('tip'), 1500);
+  // it shows itself once the card has landed, then tucks away after a few seconds so it never sits over the bio for long
+  let tipT = setTimeout(() => {
+    frontWrap.classList.add('tip');
+    tipT = setTimeout(() => frontWrap.classList.remove('tip'), 6000);
+  }, 1500);
   let flying = false;
   const FLIGHT = 1250, EDGE_ON = 0.46; // EDGE_ON: the point in the flight where the card is side-on (90deg)
   // shows one face: only the face you can see takes clicks and keyboard focus
