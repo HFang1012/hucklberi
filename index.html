@@ -507,7 +507,10 @@
     </section>
    </div>
    <div class="face back" inert>
-    <div class="flip-wrap"><button class="flip" type="button" aria-label="Flip back to the front"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a7.5 7.5 0 0 1 13.4-3.6"/><path d="M18.6 2.8v4h-4"/><path d="M19.5 14a7.5 7.5 0 0 1-13.4 3.6"/><path d="M5.4 21.2v-4h4"/></svg></span></button></div>
+    <div class="flip-wrap">
+      <button class="flip" type="button" aria-label="Flip back to the front"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a7.5 7.5 0 0 1 13.4-3.6"/><path d="M18.6 2.8v4h-4"/><path d="M19.5 14a7.5 7.5 0 0 1-13.4 3.6"/><path d="M5.4 21.2v-4h4"/></svg></span></button>
+      <span class="flip-tip" aria-hidden="true"><span class="tip-bg"></span><strong>Flip back!</strong><small>View my main profile and contact info</small></span>
+    </div>
     <div class="album">
       <figure class="art">
         <button class="art-frame" type="button" aria-label="Wiggle the drawing"><img src="photos/sleepy.webp" alt="A sleepy dark-haired character in a blue shirt, yawning, with a tiny blond star-masked buddy peeking from the pocket" width="600" height="600"></button>
@@ -668,10 +671,18 @@
   const frontWrap = frontFlip.parentElement;
   // the "Click me to flip!" bubble shows itself once the card has landed, until the first flip
   // it shows itself once the card has landed, then tucks away after a few seconds so it never sits over the bio for long
-  let tipT = setTimeout(() => {
-    frontWrap.classList.add('tip');
-    tipT = setTimeout(() => frontWrap.classList.remove('tip'), 6000);
-  }, 1500);
+  const backWrap = backFlip.parentElement;
+  // a side's popup shows itself for a few seconds, then tucks away so it never sits over the content for long
+  let tipT;
+  const showTip = (wrap, delay) => {
+    clearTimeout(tipT);
+    tipT = setTimeout(() => {
+      wrap.classList.add('tip');
+      tipT = setTimeout(() => wrap.classList.remove('tip'), 6000);
+    }, delay);
+  };
+  const hideTips = () => { clearTimeout(tipT); frontWrap.classList.remove('tip'); backWrap.classList.remove('tip'); };
+  showTip(frontWrap, 1500); // "Click me to flip!" once the card has landed on first load
   let flying = false;
   const FLIGHT = 1250, EDGE_ON = 0.46; // EDGE_ON: the point in the flight where the card is side-on (90deg)
   // shows one face: only the face you can see takes clicks and keyboard focus
@@ -683,8 +694,9 @@
   function setFlipped(on, btn) {
     if (flying) return;
     projs.forEach(close);
-    clearTimeout(tipT); frontWrap.classList.remove('tip');
-    const done = () => { (on ? backFlip : frontFlip).focus({ preventScroll: true }); if (!on) wave(); };
+    hideTips();
+    // landing on the back: "Flip back!" points the way home
+    const done = () => { (on ? backFlip : frontFlip).focus({ preventScroll: true }); if (on) showTip(backWrap, 300); else wave(); };
     if (reduce) { showFace(on); done(); return; }
     flying = true;
     // the button sinks into the card first...
