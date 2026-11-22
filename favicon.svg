@@ -1,8 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.5 2.5 35 35">
-  <!-- a soft yellow star with a sleepy blushing face, after Pane's napper star -->
-  <path d="M20 5 L24.1 14.3 L34.3 15.4 L26.7 22.2 L28.8 32.1 L20 27 L11.2 32.1 L13.3 22.2 L5.7 15.4 L15.9 14.3 Z" fill="#FFD45C" stroke="#E9A93A" stroke-width="3" stroke-linejoin="round"/>
-  <circle cx="17" cy="19.4" r="1.6" fill="#2A2D45"/>
-  <circle cx="23" cy="19.4" r="1.6" fill="#2A2D45"/>
-  <ellipse cx="14.2" cy="22.6" rx="2" ry="1.25" fill="#F49CB0"/>
-  <ellipse cx="25.8" cy="22.6" rx="2" ry="1.25" fill="#F49CB0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- a bubbly "<_": drawn as fat round-capped strokes (favicons can't load web fonts),
+       yellow over a chunky blue outline with a hard drop, like the name on the page -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#5A6CC4" stroke-width="15" transform="translate(1.5 3)">
+      <path d="M27 8 L10 25 L27 42"/>
+      <path d="M40 52 L53 52"/>
+    </g>
+    <g stroke="#7186EC" stroke-width="15">
+      <path d="M27 8 L10 25 L27 42"/>
+      <path d="M40 52 L53 52"/>
+    </g>
+    <g stroke="#FFDB4D" stroke-width="8.5">
+      <path d="M27 8 L10 25 L27 42"/>
+      <path d="M40 52 L53 52"/>
+    </g>
+  </g>
 </svg>

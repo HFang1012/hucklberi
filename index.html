@@ -77,7 +77,8 @@
 
   /* ---------- the back: "A bit more of me!" ---------- */
   .back { align-content: center; }
-  .album { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: clamp(24px, 4vw, 44px); width: 100%; padding: 4px 6px 8px; }
+  /* extra room on the left nudges the whole back (drawing and text) toward the middle */
+  .album { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: clamp(24px, 4vw, 44px); width: 100%; padding: 4px 6px 8px clamp(20px, 4vw, 48px); }
   .art { margin: 0; display: grid; justify-items: center; gap: 18px; }
   /* the whole drawing, framed: a white mat inside a blue rim, tilted, and it stays tilted */
   .art-frame {
@@ -203,8 +204,7 @@
   .flip-tip {
     position: relative; top: -2px; flex: none; height: 34px; line-height: 32px; padding: 0 13px;
     white-space: nowrap; font-size: 13.5px; font-weight: 900; color: var(--yellow-ink);
-    background: var(--yellow-soft); border-radius: 14px; box-shadow: 0 0 0 2px #F7E2A8, 0 3px 0 2px #F7E2A8;
-    pointer-events: none; transform-origin: calc(100% + 16px) 50%;
+    isolation: isolate; pointer-events: none; transform-origin: calc(100% + 16px) 50%;
     opacity: 0; scale: 0.4; rotate: 6deg;
     transition: opacity 140ms ease, scale 220ms var(--smooth), rotate 220ms var(--smooth);
   }
@@ -214,10 +214,17 @@
   }
   .flip-wrap.tip .flip-tip { animation: tip-bob 2.4s ease-in-out 800ms infinite; }
   @keyframes tip-bob { 50% { translate: -4px 0; } }
-  /* the arrow: a rounded square turned 45deg, outlined only on its two outer edges */
-  .flip-tip::after {
-    content: ""; position: absolute; right: -6px; top: 50%; width: 13px; height: 13px; margin-top: -7px; border-radius: 3px;
-    background: var(--yellow-soft); box-shadow: 2px -2px 0 #F7E2A8; transform: rotate(45deg);
+  /* the bubble's body and arrow are one shape behind the text. Zero-radius drop-shadows trace the
+     outline of that combined shape, so the edge and the bottom shadow run around the arrow without a seam
+     (box-shadow can't: it only follows each box separately). No blur anywhere. */
+  .tip-bg {
+    position: absolute; inset: 0; z-index: -1; border-radius: 14px; background: var(--yellow-soft);
+    filter: drop-shadow(2px 0 0 #F3D98F) drop-shadow(-2px 0 0 #F3D98F) drop-shadow(0 -2px 0 #F3D98F) drop-shadow(0 2px 0 #F3D98F)
+            drop-shadow(0 4px 0 #E9C266);
+  }
+  .tip-bg::after {
+    content: ""; position: absolute; right: -6px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 3px;
+    background: var(--yellow-soft); transform: rotate(45deg);
   }
 
   /* ---------- projects tray ---------- */
@@ -336,7 +343,7 @@
     body { overflow-y: auto; }
     main { height: auto; min-height: 100dvh; padding: 14px 12px 34px; }
     .face { border-radius: 32px; }
-    .album { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; }
+    .album { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; padding-left: 6px; }
     .more { width: auto; justify-self: center; justify-items: center; text-align: center; }
     .album-title { font-size: 36px; }
     .art-frame { --s: 230px; }
@@ -383,7 +390,7 @@
    <div class="face front">
     <div class="flip-wrap">
       <button class="flip" type="button" aria-label="Flip the card"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a7.5 7.5 0 0 1 13.4-3.6"/><path d="M18.6 2.8v4h-4"/><path d="M19.5 14a7.5 7.5 0 0 1-13.4 3.6"/><path d="M5.4 21.2v-4h4"/></svg></span></button>
-      <span class="flip-tip" aria-hidden="true">Click me to flip!</span>
+      <span class="flip-tip" aria-hidden="true"><span class="tip-bg"></span>Click me to flip!</span>
     </div>
 
     <div class="top">
