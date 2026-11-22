@@ -147,7 +147,10 @@
     text-shadow: 2px 2px 0 #7186EC, 3px 4px 0 #7186EC, 4px 6px 0 #7186EC, 5px 8px 0 rgba(113,134,236,0.3);
     padding-right: 56px; --d: 320ms;
   }
-  h1 .ch { display: inline-block; transition: translate 380ms var(--bouncy); }  h1 .ch:hover { translate: 0 -8px; }
+  /* both titles are built letter by letter so each letter can hop, wave and shake */
+  .ch { display: inline-block; transition: translate 380ms var(--bouncy); }
+  .ch:hover { translate: 0 -8px; }
+  .word { display: inline-block; white-space: nowrap; } /* keeps letters of a word on one line */
   .bio { margin: clamp(10px, 1.8vh, 16px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
 
   .rows { margin-top: clamp(10px, 1.8vh, 16px); display: grid; gap: 8px; --d: 470ms; }
@@ -529,7 +532,7 @@
         <figcaption class="credit">by Ryn<svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.6 0 5.6 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z" fill="var(--blue)"/></svg></figcaption>
       </figure>
       <div class="more">
-        <h2 class="album-title">A bit more of me!</h2>
+        <h2 class="album-title" aria-label="A bit more of me!">A bit more of me!</h2>
         <p class="more-note"><span class="line">I'm pretty introverted...</span> <span class="line">But I still love meeting new people!</span> <span class="line">I love mental health too!!!</span></p>
       </div>
     </div>
@@ -550,18 +553,27 @@
     { c: '#B9A5F4', lip: '#8E76DC' },
   ];
 
-  /* ---------- name: one span per letter, so each can hop ---------- */
+  /* ---------- titles: one span per letter, so each can hop, wave and shake ---------- */
+  // words are wrapped so a line can only break between them, never mid-word
+  function splitLetters(el, text) {
+    el.replaceChildren();
+    text.split(' ').forEach((word, w) => {
+      if (w) el.append(' ');
+      const wrap = document.createElement('span'); wrap.className = 'word'; wrap.setAttribute('aria-hidden', 'true');
+      [...word].forEach((c) => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; wrap.append(s); });
+      el.append(wrap);
+    });
+  }
   const h1 = document.getElementById('name');
-  [...'hucklberi'].forEach((ch, i) => {
-    const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; s.setAttribute('aria-hidden', 'true');
-    h1.append(s);
-  });
-  const wave = () => {
+  const backTitle = document.querySelector('.album-title');
+  splitLetters(h1, 'hucklberi');
+  splitLetters(backTitle, backTitle.getAttribute('aria-label'));
+  function wave(el = h1) {
     if (reduce) return;
-    h1.querySelectorAll('.ch').forEach((s, i) => s.animate(
+    el.querySelectorAll('.ch').forEach((s, i) => s.animate(
       [{ translate: '0 0' }, { translate: '0 -12px' }, { translate: '0 0' }],
       { duration: 560, delay: i * 45, easing: 'cubic-bezier(.3,.7,.4,1)' }));
-  };
+  }
   setTimeout(wave, 1100);
 
   /* ---------- toast ---------- */
@@ -599,8 +611,12 @@
       { scale: '1.02', rotate: '-3.8deg', offset: 0.72 },
       { scale: '1', rotate: '-5deg' },
     ], { duration: 520, easing: 'cubic-bezier(.3,.7,.4,1)' });
-    // each letter gets its own little shake, rippling left to right; alternate letters lean opposite ways
-    h1.querySelectorAll('.ch').forEach((ch, i) => {
+    shakeLetters(h1);
+  });
+  // each letter gets its own little shake, rippling left to right; alternate letters lean opposite ways
+  function shakeLetters(el) {
+    if (reduce) return;
+    el.querySelectorAll('.ch').forEach((ch, i) => {
       restart(ch);
       const d = i % 2 ? -1 : 1;
       ch.animate([
@@ -612,7 +628,7 @@
         { translate: '0 0', scale: '1', rotate: '0deg' },
       ], { duration: 560, delay: i * 40, easing: 'cubic-bezier(.3,.7,.4,1)' });
     });
-  });
+  }
 
 
   /* ---------- project popups ---------- */
@@ -715,7 +731,7 @@
     projs.forEach(close);
     hideTips();
     // landing on the back: "Flip back!" points the way home
-    const done = () => { (on ? backFlip : frontFlip).focus({ preventScroll: true }); if (on) showTip(backWrap, 300); else wave(); };
+    const done = () => { (on ? backFlip : frontFlip).focus({ preventScroll: true }); if (on) { showTip(backWrap, 300); setTimeout(() => wave(backTitle), 150); } else wave(); };
     if (reduce) { showFace(on); done(); return; }
     flying = true;
     // the button sinks into the card first...
@@ -757,6 +773,7 @@
       { scale: '1.01', rotate: `${base + 1}deg`, offset: 0.8 },
       { scale: '1',    rotate: `${base}deg` },
     ], { duration: 520, easing: 'cubic-bezier(.3,.7,.4,1)' });
+    shakeLetters(backTitle);
   }));
 
   /* ---------- the sky: rounded shapes drifting up, nudged by the cursor ---------- */
