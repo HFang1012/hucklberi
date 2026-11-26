@@ -303,8 +303,8 @@
   .proj.itch  { --t-c: var(--yellow); --t-lip: var(--yellow-lip); --t-soft: var(--yellow-soft); --t-lip2: #F2D58A; --t-ink: var(--yellow-ink); }
   .proj.mcstats { --t-c: var(--green); --t-lip: var(--green-lip); --t-soft: var(--green-soft); --t-lip2: #BFE3B0; --t-ink: var(--green-ink); }
   .px { shape-rendering: crispEdges; } /* mcstats' grass block stays pixel-sharp */
-  /* the grass block fills its frame and gets rounded, like Pane's picture; clip-path rounds an inline svg reliably */
-  .tile .ico svg.px { width: 100%; height: 100%; clip-path: inset(0 round 17px); }
+  /* sized and rounded to match the rounded square in Pane's icon art; clip-path rounds an inline svg reliably */
+  .tile .ico svg.px, .pop-pic svg.px { width: 80%; height: 80%; border-radius: 0; clip-path: inset(0 round 24%); }
 
   /* ---------- popups, after Pane's who-card: they pop up out of the tile with a bounce ---------- */
   .pop {
@@ -336,7 +336,6 @@
   }
   .pop-pic > * { width: 100%; height: 100%; border-radius: 19px; object-fit: cover; }
   .pop-pic svg { width: 62%; height: 62%; border-radius: 0; }
-  .pop-pic svg.px { width: 100%; height: 100%; clip-path: inset(0 round 19px); }
   .proj.open .pop-pic { opacity: 1; scale: 1; rotate: -5deg; transition: opacity 160ms ease 80ms, scale 700ms var(--bouncy) 80ms, rotate 700ms var(--bouncy) 80ms; }
   .pop-pic.tinted { background: var(--t-soft); }
 
@@ -389,9 +388,7 @@
     .tile small { display: none; }
     .wip { display: table; margin: 3px auto 0; }
     .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
-    .tile .ico svg { width: 26px; height: 26px; }
-    .tile .ico svg.px { width: 100%; height: 100%; clip-path: inset(0 round 14px); }
-  }
+    .tile .ico svg { width: 26px; height: 26px; }  }
   /* ---------- small screens: stack, but still one screen tall ---------- */
   @media (max-width: 720px) {
     /* popup footer: keep the button and URL on one line; the URL truncates instead of wrapping */
