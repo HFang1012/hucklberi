@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 238 238">
-  <!-- hand-drawn h on the page's dotted paper, traced from the sketch -->
-  <rect width="238" height="238" fill="#E9EDFB"/>
-  <g fill="#D4DAF4">
-    <circle cx="61" cy="6" r="6.5"/><circle cx="61" cy="72" r="6.5"/><circle cx="61" cy="142" r="6.5"/><circle cx="61" cy="209" r="6.5"/><circle cx="128" cy="6" r="6.5"/><circle cx="128" cy="72" r="6.5"/><circle cx="128" cy="142" r="6.5"/><circle cx="128" cy="209" r="6.5"/><circle cx="195" cy="6" r="6.5"/><circle cx="195" cy="72" r="6.5"/><circle cx="195" cy="142" r="6.5"/><circle cx="195" cy="209" r="6.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- rounded box, dotted paper, a lighter yellow hand-drawn h -->
+  <defs>
+    <clipPath id="box"><rect x="3.4" y="3.4" width="57.2" height="57.2" rx="14.2"/></clipPath>
+  </defs>
+  <rect x="1.8" y="1.8" width="60.4" height="60.4" rx="16" fill="#F7F8FF" stroke="#C9D1F2" stroke-width="2.6"/>
+  <g clip-path="url(#box)" fill="#D5DCF6">
+    <circle cx="16" cy="16" r="2.05"/><circle cx="16" cy="32" r="2.05"/><circle cx="16" cy="48" r="2.05"/><circle cx="32" cy="16" r="2.05"/><circle cx="32" cy="32" r="2.05"/><circle cx="32" cy="48" r="2.05"/><circle cx="48" cy="16" r="2.05"/><circle cx="48" cy="32" r="2.05"/><circle cx="48" cy="48" r="2.05"/>
   </g>
-  <g fill="none" stroke="#E9A845" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 160.5 38.0 C 159.7 39.3 157.3 43.3 155.7 46.0 C 154.1 48.7 152.8 51.4 151.0 54.4 C 149.1 57.5 147.0 60.8 144.8 64.4 C 142.6 68.0 140.1 72.1 137.7 76.0 C 135.4 79.9 133.1 84.0 130.7 88.0 C 128.3 92.0 125.8 96.0 123.4 100.0 C 121.1 104.0 118.9 108.0 116.7 112.0 C 114.5 116.0 112.2 120.0 110.2 124.0 C 108.1 128.0 106.3 132.0 104.3 136.0 C 102.3 140.0 100.1 144.0 98.2 148.0 C 96.3 152.0 94.6 156.0 93.0 160.0 C 91.4 164.0 90.1 168.0 88.5 172.0 C 86.9 176.0 85.4 180.0 83.7 184.0 C 81.9 188.0 80.0 192.0 78.1 196.0 C 76.2 200.0 73.4 206.0 72.5 208.0"/>
-    <path d="M 141.0 150.0 C 141.9 151.6 144.6 156.6 146.5 159.6 C 148.4 162.6 150.2 165.3 152.1 168.0 C 154.0 170.7 156.0 173.4 157.9 176.0 C 159.8 178.6 161.6 181.2 163.5 183.6 C 165.4 185.9 167.2 187.9 169.1 190.0 C 171.0 192.1 172.9 194.0 174.7 196.0 C 176.4 198.0 178.7 201.0 179.5 202.0"/>
+  <g clip-path="url(#box)" fill="none" stroke="#FFDB4D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 39.92 12.16 C 37.06 20.08 33.54 27.12 30.46 32.40 C 27.38 37.68 24.30 44.28 21.66 48.68 C 20.34 51.32 19.90 52.20 19.46 52.64"/>
+    <path d="M 32.66 37.24 C 36.62 41.64 40.58 46.04 44.54 50.44"/>
   </g>
 </svg>
