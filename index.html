@@ -83,7 +83,7 @@
   .face {
     background: var(--card); border-radius: 40px;
     box-shadow: 0 0 0 2px var(--edge), 0 10px 0 2px var(--card-lip);
-    padding: clamp(20px, 3.4vh, 34px) clamp(20px, 3.4vw, 36px) clamp(18px, 2.6vh, 26px);
+    padding: clamp(20px, 4.6vh, 50px) clamp(20px, 3.4vw, 40px) clamp(18px, 3.6vh, 40px);
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
   }
   .front { position: relative; }
@@ -137,7 +137,7 @@
   /* ---------- the big bubbly avatar ---------- */
   .pic-wrap { padding: 6px 6px 14px; }
   .pic {
-    --s: clamp(150px, 25vh, 232px);
+    --s: clamp(150px, 27vh, 252px);
     position: relative; display: block; width: var(--s); height: var(--s); padding: 7px; border-radius: 30%;
     background: #fff;
     box-shadow: 0 0 0 5px var(--yellow), 0 11px 0 5px var(--yellow-lip);
@@ -169,14 +169,15 @@
   .ch { display: inline-block; transition: translate 380ms var(--bouncy); }
   .ch:hover { translate: 0 -8px; }
   .word { display: inline-block; white-space: nowrap; } /* keeps letters of a word on one line */
-  .bio { margin: clamp(10px, 1.8vh, 16px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
+  .bio { margin: clamp(10px, 2.2vh, 20px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
 
-  .rows { margin-top: clamp(10px, 1.8vh, 16px); display: grid; gap: 8px; --d: 470ms; }
+  .rows { margin-top: clamp(10px, 2.4vh, 22px); display: grid; gap: clamp(8px, 1.2vh, 11px); --d: 470ms; }
   .row { display: grid; grid-template-columns: 92px 1fr; align-items: center; font-size: 17px; font-weight: 800; }
   .k { justify-self: start; font-size: 11px; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; }
   .k.discord { color: #4A55C8; background: #E2E5FE; }
   .k.email { color: var(--yellow-ink); background: var(--yellow-soft); }
   .k.github { color: var(--purple-ink); background: var(--purple-soft); }
+  .k.server { color: var(--green-ink); background: var(--green-soft); }
   .v { justify-self: start; font-weight: 800; text-decoration: underline 2.5px transparent; text-underline-offset: 4px; transition: text-decoration-color 140ms ease, color 140ms ease; min-width: 0; overflow-wrap: anywhere; text-align: left; }
   .v:hover { text-decoration-color: var(--yellow); }
   .copy-hint { display: inline-block; margin-left: 8px; font-size: 12px; font-weight: 800; color: var(--blue-ink); background: var(--blue-soft); padding: 1px 8px; border-radius: 999px; opacity: 0; scale: 0.6; transition: opacity 160ms ease, scale 360ms var(--bouncy); vertical-align: 2px; }
@@ -188,7 +189,7 @@
   .v:hover .go-hint svg { translate: 2px -2px; }
 
   /* likes: chunky keys you can press */
-  .likes { margin-top: clamp(12px, 2vh, 18px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
+  .likes { margin-top: clamp(12px, 2.6vh, 24px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
   .like {
     display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 10px; border-radius: 14px;
     font-size: 14px; font-weight: 800; margin-bottom: 4px;
@@ -260,7 +261,7 @@
 
   /* ---------- projects tray ---------- */
   .tray {
-    margin-top: clamp(16px, 3vh, 26px); background: var(--well); border-radius: 30px; padding: 14px;
+    margin-top: clamp(16px, 4vh, 38px); background: var(--well); border-radius: 30px; padding: 16px;
     box-shadow: inset 0 -4px 0 var(--card-lip);
   }
   .tray-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 2px 6px 12px; animation: rise 700ms var(--bouncy) 620ms both; }
@@ -301,6 +302,8 @@
   .proj.itch  { --t-c: var(--yellow); --t-lip: var(--yellow-lip); --t-soft: var(--yellow-soft); --t-lip2: #F2D58A; --t-ink: var(--yellow-ink); }
   .proj.mcstats { --t-c: var(--green); --t-lip: var(--green-lip); --t-soft: var(--green-soft); --t-lip2: #BFE3B0; --t-ink: var(--green-ink); }
   .px { shape-rendering: crispEdges; } /* mcstats' grass block stays pixel-sharp */
+  /* the grass block fills its frame and gets rounded, like Pane's picture; clip-path rounds an inline svg reliably */
+  .tile .ico svg.px { width: 100%; height: 100%; clip-path: inset(0 round 17px); }
 
   /* ---------- popups, after Pane's who-card: they pop up out of the tile with a bounce ---------- */
   .pop {
@@ -332,6 +335,7 @@
   }
   .pop-pic > * { width: 100%; height: 100%; border-radius: 19px; object-fit: cover; }
   .pop-pic svg { width: 62%; height: 62%; border-radius: 0; }
+  .pop-pic svg.px { width: 100%; height: 100%; clip-path: inset(0 round 19px); }
   .proj.open .pop-pic { opacity: 1; scale: 1; rotate: -5deg; transition: opacity 160ms ease 80ms, scale 700ms var(--bouncy) 80ms, rotate 700ms var(--bouncy) 80ms; }
   .pop-pic.tinted { background: var(--t-soft); }
 
@@ -384,6 +388,7 @@
     .tile small { display: none; }
     .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
     .tile .ico svg { width: 26px; height: 26px; }
+    .tile .ico svg.px { width: 100%; height: 100%; clip-path: inset(0 round 14px); }
   }
   /* ---------- small screens: stack, but still one screen tall ---------- */
   @media (max-width: 720px) {
@@ -458,6 +463,7 @@
 
         <div class="rows">
           <div class="row"><span class="k discord">Discord</span><button class="v copy" type="button" data-copy="basicallyahucklberi">basicallyahucklberi<span class="copy-hint">Copy</span></button></div>
+          <div class="row"><span class="k server">Server</span><a class="v" href="https://discord.gg/qUaJw55eEW" target="_blank" rel="noopener">discord.gg/qUaJw55eEW<span class="copy-hint go-hint">Join<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></span></a></div>
           <div class="row"><span class="k email">Email</span><button class="v copy" type="button" data-copy="hfanggamedev@gmail.com">hfanggamedev@gmail.com<span class="copy-hint">Copy</span></button></div>
           <div class="row"><span class="k github">GitHub</span><a class="v" href="https://github.com/HFang1012" target="_blank" rel="noopener">HFang1012<span class="copy-hint go-hint">GitHub<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></span></a></div>
         </div>
@@ -509,7 +515,7 @@
           </button>
           <div class="pop" id="pop-mcstats" role="group" aria-label="About mcstats">
             <div class="pop-head">
-              <span class="pop-pic tinted"><svg class="px" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="#8a5a33"/><rect width="8" height="3" fill="#5fae4c"/><path fill="#5fae4c" d="M1 3h1v1H1zM4 3h2v1H4zM7 3h1v1H7z"/><path fill="#86cf6f" d="M0 0h2v1H0zM5 0h1v1H5zM3 1h1v1H3zM6 1h2v1H6z"/><path fill="#6b4324" d="M2 5h1v1H2zM6 4h1v1H6zM4 6h2v1H4zM0 7h1v1H0z"/><path fill="#a47148" d="M0 4h1v1H0zM3 5h1v1H3zM6 6h1v1H6zM2 7h1v1H2z"/></svg></span>
+              <span class="pop-pic"><svg class="px" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="#8a5a33"/><rect width="8" height="3" fill="#5fae4c"/><path fill="#5fae4c" d="M1 3h1v1H1zM4 3h2v1H4zM7 3h1v1H7z"/><path fill="#86cf6f" d="M0 0h2v1H0zM5 0h1v1H5zM3 1h1v1H3zM6 1h2v1H6z"/><path fill="#6b4324" d="M2 5h1v1H2zM6 4h1v1H6zM4 6h2v1H4zM0 7h1v1H0z"/><path fill="#a47148" d="M0 4h1v1H0zM3 5h1v1H3zM6 6h1v1H6zM2 7h1v1H2z"/></svg></span>
               <span><strong class="pop-title st">mcstats</strong><span class="pop-tag st">Minecraft mod + site</span></span>
             </div>
             <p class="pop-desc st">A web page for your Minecraft server: who played, when, and for how long, plus the chat, every death and every advancement. Admins can even watch the world live and chat with players from the browser.</p>
