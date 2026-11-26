@@ -16,15 +16,15 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="1200">
-<meta property="og:image:alt" content="A hand-drawn yellow h in a rounded box">
+<meta property="og:image:alt" content="A yellow sparkle">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hucklberi">
 <meta name="twitter:description" content="Hai! Call me hucklberi or hf. I like coding websites, apps, and video games, and I build with my team Empty Console.">
 <meta name="twitter:image" content="https://hfang1012.github.io/hucklberi/og.png">
-<meta name="twitter:image:alt" content="A hand-drawn yellow h in a rounded box">
-<link rel="icon" href="favicon.svg?v=5" type="image/svg+xml">
-<link rel="icon" href="favicon.png?v=5" type="image/png" sizes="512x512">
-<link rel="apple-touch-icon" href="favicon.png?v=5">
+<meta name="twitter:image:alt" content="A yellow sparkle">
+<link rel="icon" href="favicon.svg?v=7" type="image/svg+xml">
+<link rel="icon" href="favicon.png?v=7" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="favicon.png?v=7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -83,7 +83,7 @@
   .face {
     background: var(--card); border-radius: 40px;
     box-shadow: 0 0 0 2px var(--edge), 0 10px 0 2px var(--card-lip);
-    padding: clamp(20px, 4.6vh, 50px) clamp(20px, 3.4vw, 40px) clamp(18px, 3.6vh, 40px);
+    padding: clamp(18px, 3.4vh, 36px) clamp(18px, 2.8vw, 32px) clamp(16px, 2.8vh, 30px);
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
   }
   .front { position: relative; }
@@ -132,7 +132,7 @@
   @keyframes photo-in { from { opacity: 0; scale: 0.4; } }
   @keyframes card-in { from { opacity: 0; scale: 0.6; rotate: -4deg; } 30% { opacity: 1; } }
 
-  .top { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3.4vw, 40px); align-items: center; }
+  .top { display: grid; grid-template-columns: auto 1fr; gap: clamp(16px, 2.6vw, 30px); align-items: center; }
 
   /* ---------- the big bubbly avatar ---------- */
   .pic-wrap { padding: 6px 6px 14px; }
@@ -169,9 +169,9 @@
   .ch { display: inline-block; transition: translate 380ms var(--bouncy); }
   .ch:hover { translate: 0 -8px; }
   .word { display: inline-block; white-space: nowrap; } /* keeps letters of a word on one line */
-  .bio { margin: clamp(10px, 2.2vh, 20px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
+  .bio { margin: clamp(8px, 1.6vh, 14px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
 
-  .rows { margin-top: clamp(10px, 2.4vh, 22px); display: grid; gap: clamp(8px, 1.2vh, 11px); --d: 470ms; }
+  .rows { margin-top: clamp(8px, 1.8vh, 16px); display: grid; gap: clamp(6px, 1vh, 9px); --d: 470ms; }
   .row { display: grid; grid-template-columns: 92px 1fr; align-items: center; font-size: 17px; font-weight: 800; }
   .k { justify-self: start; font-size: 11px; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; }
   .k.discord { color: #4A55C8; background: #E2E5FE; }
@@ -184,12 +184,12 @@
   .v:hover .copy-hint, .v:focus-visible .copy-hint, .v.done .copy-hint { opacity: 1; scale: 1; }
   .v.done .copy-hint { color: var(--yellow-ink); background: var(--yellow-soft); }
   /* GitHub's pill says where the link goes; its arrow nudges up and out on hover */
-  .go-hint { color: var(--purple-ink); background: var(--purple-soft); }
-  .go-hint svg { width: 10px; height: 10px; margin-left: 4px; vertical-align: -0.5px; transition: translate 300ms var(--bouncy); }
+  .go-hint { display: inline-flex; align-items: center; gap: 4px; color: var(--purple-ink); background: var(--purple-soft); }
+  .go-hint svg { display: block; width: 13px; height: 13px; flex: none; transition: translate 300ms var(--bouncy); }
   .v:hover .go-hint svg { translate: 2px -2px; }
 
   /* likes: chunky keys you can press */
-  .likes { margin-top: clamp(12px, 2.6vh, 24px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
+  .likes { margin-top: clamp(10px, 2vh, 18px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
   .like {
     display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 10px; border-radius: 14px;
     font-size: 14px; font-weight: 800; margin-bottom: 4px;
@@ -261,7 +261,7 @@
 
   /* ---------- projects tray ---------- */
   .tray {
-    margin-top: clamp(16px, 4vh, 38px); background: var(--well); border-radius: 30px; padding: 16px;
+    margin-top: clamp(14px, 2.8vh, 26px); background: var(--well); border-radius: 30px; padding: 14px;
     box-shadow: inset 0 -4px 0 var(--card-lip);
   }
   .tray-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 2px 6px 12px; animation: rise 700ms var(--bouncy) 620ms both; }
@@ -296,6 +296,7 @@
   .tile .ico img { width: 100%; height: 100%; object-fit: cover; }
   .tile .ico svg { width: 32px; height: 32px; }
   .tile strong { display: block; font-size: 17px; font-weight: 900; line-height: 1.2; }
+  .wip { display: inline-block; margin-left: 6px; vertical-align: 2px; font-size: 10px; font-weight: 900; letter-spacing: 0.07em; line-height: 1.5; padding: 0 7px; border-radius: 999px; color: #4A55C8; background: #E2E5FE; }
   .tile small { display: block; font-size: 13px; font-weight: 700; color: var(--ink-2); line-height: 1.3; margin-top: 2px; }
   .proj.pane  { --t-c: var(--purple); --t-lip: var(--purple-lip); --t-soft: var(--purple-soft); --t-lip2: #D5C8FA; --t-ink: var(--purple-ink); }
   .proj.team  { --t-c: var(--blue);   --t-lip: var(--blue-lip);   --t-soft: var(--blue-soft);   --t-lip2: #C2CCF4; --t-ink: var(--blue-ink); }
@@ -386,6 +387,7 @@
     .tile { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding: 10px 6px 9px; border-radius: 20px; }
     .tile strong { font-size: 14px; }
     .tile small { display: none; }
+    .wip { display: table; margin: 3px auto 0; }
     .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
     .tile .ico svg { width: 26px; height: 26px; }
     .tile .ico svg.px { width: 100%; height: 100%; clip-path: inset(0 round 14px); }
@@ -463,9 +465,9 @@
 
         <div class="rows">
           <div class="row"><span class="k discord">Discord</span><button class="v copy" type="button" data-copy="basicallyahucklberi">basicallyahucklberi<span class="copy-hint">Copy</span></button></div>
-          <div class="row"><span class="k server">Server</span><a class="v" href="https://discord.gg/qUaJw55eEW" target="_blank" rel="noopener">discord.gg/qUaJw55eEW<span class="copy-hint go-hint">Join<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></span></a></div>
+          <div class="row"><span class="k server">Server</span><a class="v" href="https://discord.gg/qUaJw55eEW" target="_blank" rel="noopener">discord.gg/qUaJw55eEW<span class="copy-hint go-hint">Join<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3.5h7v7M12.5 3.5l-9 9"/></svg></span></a></div>
           <div class="row"><span class="k email">Email</span><button class="v copy" type="button" data-copy="hfanggamedev@gmail.com">hfanggamedev@gmail.com<span class="copy-hint">Copy</span></button></div>
-          <div class="row"><span class="k github">GitHub</span><a class="v" href="https://github.com/HFang1012" target="_blank" rel="noopener">HFang1012<span class="copy-hint go-hint">GitHub<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></span></a></div>
+          <div class="row"><span class="k github">GitHub</span><a class="v" href="https://github.com/HFang1012" target="_blank" rel="noopener">HFang1012<span class="copy-hint go-hint">GitHub<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3.5h7v7M12.5 3.5l-9 9"/></svg></span></a></div>
         </div>
 
         <div class="likes" role="list" aria-label="Things I like">
@@ -488,7 +490,7 @@
         <div class="proj pane" style="--d:760ms">
           <button class="tile" type="button" aria-expanded="false" aria-controls="pop-pane">
             <span class="ico"><img src="https://hfang1012.github.io/Pane-Mac/icon.png" alt="" width="52" height="52"></span>
-            <span><strong>Pane</strong><small>Small tools for your Mac</small></span>
+            <span><strong>Pane<span class="wip">WIP</span></strong><small>Small tools for your Mac</small></span>
           </button>
           <div class="pop" id="pop-pane" role="group" aria-label="About Pane">
             <div class="pop-head">
@@ -511,7 +513,7 @@
         <div class="proj mcstats" style="--d:840ms">
           <button class="tile" type="button" aria-expanded="false" aria-controls="pop-mcstats">
             <span class="ico"><svg class="px" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="#8a5a33"/><rect width="8" height="3" fill="#5fae4c"/><path fill="#5fae4c" d="M1 3h1v1H1zM4 3h2v1H4zM7 3h1v1H7z"/><path fill="#86cf6f" d="M0 0h2v1H0zM5 0h1v1H5zM3 1h1v1H3zM6 1h2v1H6z"/><path fill="#6b4324" d="M2 5h1v1H2zM6 4h1v1H6zM4 6h2v1H4zM0 7h1v1H0z"/><path fill="#a47148" d="M0 4h1v1H0zM3 5h1v1H3zM6 6h1v1H6zM2 7h1v1H2z"/></svg></span>
-            <span><strong>mcstats</strong><small>Minecraft server stats</small></span>
+            <span><strong>mcstats<span class="wip">WIP</span></strong><small>Minecraft server stats</small></span>
           </button>
           <div class="pop" id="pop-mcstats" role="group" aria-label="About mcstats">
             <div class="pop-head">
