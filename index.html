@@ -57,7 +57,7 @@
   main { perspective: 1800px; }
   /* the card is a two-sided object: it turns on Y, each face hides its back */
   .card {
-    position: relative; width: min(860px, 100%);
+    position: relative; width: min(1100px, 100%);
     transform-style: preserve-3d; transform: rotateY(0deg);
     /* "backwards", not "both": a held opacity animation makes Chrome flatten the 3D flip and the back face vanishes */
     animation: card-in 900ms var(--bouncy) backwards;
@@ -249,7 +249,8 @@
   .tray-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 2px 6px 12px; animation: rise 700ms var(--bouncy) 620ms both; }
   .tray-head h2 { margin: 0; font-size: 19px; font-weight: 900; letter-spacing: -0.01em; }
   .tray-head p { margin: 0; font-size: 13px; font-weight: 700; color: var(--ink-2); }
-  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  /* one row, so every popup opens above the row and never covers another project */
+  .projects { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 
   .proj { position: relative; z-index: 1; animation: pop-in 700ms var(--bouncy) both; animation-delay: var(--d); }
   /* the animation gives each tile its own layer, so the open one has to rise above the flip button */
@@ -359,6 +360,14 @@
   .toast.on { opacity: 1; scale: 1; transition: opacity 140ms ease, scale 520ms var(--bouncy); }
 
   .hint { position: fixed; z-index: 3; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; font-size: 12.5px; font-weight: 700; color: var(--ink-2); opacity: 0.8; animation: rise 700ms var(--bouncy) 1200ms both; pointer-events: none; white-space: nowrap; }
+  /* too narrow for four full tiles in a row: icon over name, the subtitle waits in the popup */
+  @media (max-width: 1140px) {
+    .tile { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding: 10px 6px 9px; border-radius: 20px; }
+    .tile strong { font-size: 14px; }
+    .tile small { display: none; }
+    .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
+    .tile .ico svg { width: 26px; height: 26px; }
+  }
   /* ---------- small screens: stack, but still one screen tall ---------- */
   @media (max-width: 720px) {
     /* popup footer: keep the button and URL on one line; the URL truncates instead of wrapping */
@@ -389,12 +398,9 @@
     .copy-hint { display: none; }
     main { padding-bottom: 18px; }
     .projects { gap: 8px; }
-    .tile { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding: 10px 6px 9px; border-radius: 20px; }
-    .tile strong { font-size: 14px; }
-    .tile small { display: none; }
+    .tile { padding: 10px 4px 9px; }
+    .tile strong { font-size: 13px; }
     .tray-head { margin-bottom: 8px; }
-    .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
-    .tile .ico svg { width: 26px; height: 26px; }
     .tray { padding: 10px; border-radius: 26px; }
     .tray-head p { display: none; }
     .hint { display: none; }
@@ -482,7 +488,7 @@
         <div class="proj mcstats" style="--d:840ms">
           <button class="tile" type="button" aria-expanded="false" aria-controls="pop-mcstats">
             <span class="ico"><svg class="px" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="#8a5a33"/><rect width="8" height="3" fill="#5fae4c"/><path fill="#5fae4c" d="M1 3h1v1H1zM4 3h2v1H4zM7 3h1v1H7z"/><path fill="#86cf6f" d="M0 0h2v1H0zM5 0h1v1H5zM3 1h1v1H3zM6 1h2v1H6z"/><path fill="#6b4324" d="M2 5h1v1H2zM6 4h1v1H6zM4 6h2v1H4zM0 7h1v1H0z"/><path fill="#a47148" d="M0 4h1v1H0zM3 5h1v1H3zM6 6h1v1H6zM2 7h1v1H2z"/></svg></span>
-            <span><strong>mcstats</strong><small>Live stats for Minecraft servers</small></span>
+            <span><strong>mcstats</strong><small>Minecraft server stats</small></span>
           </button>
           <div class="pop" id="pop-mcstats" role="group" aria-label="About mcstats">
             <div class="pop-head">
