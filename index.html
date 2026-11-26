@@ -4,24 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>hucklberi</title>
-<meta name="description" content="Hai! Call me hucklberi or hf. I like coding websites, apps, and video games, and I build with my team Empty Console.">
-<link rel="canonical" href="https://hfang1012.github.io/hucklberi/">
-<meta name="theme-color" content="#E9EDFB">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="hucklberi">
-<meta property="og:title" content="hucklberi">
-<meta property="og:description" content="Hai! Call me hucklberi or hf. I like coding websites, apps, and video games, and I build with my team Empty Console.">
-<meta property="og:url" content="https://hfang1012.github.io/hucklberi/">
-<meta property="og:image" content="https://hfang1012.github.io/hucklberi/og.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="1200">
-<meta property="og:image:alt" content="hucklberi’s profile picture in a yellow frame">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="hucklberi">
-<meta name="twitter:description" content="Hai! Call me hucklberi or hf. I like coding websites, apps, and video games, and I build with my team Empty Console.">
-<meta name="twitter:image" content="https://hfang1012.github.io/hucklberi/og.png">
-<meta name="twitter:image:alt" content="hucklberi’s profile picture in a yellow frame">
+<meta name="description" content="hucklberi (hf) codes websites, apps, and video games, and builds with the team Empty Console.">
 <link rel="icon" href="favicon.png?v=8" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="favicon.png?v=8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +18,6 @@
     --blue: #7C8FE0; --blue-lip: #5A6CC4; --blue-soft: #E3E8FC; --blue-ink: #3D4FAE;
     --yellow: #FFD45C; --yellow-lip: #E9A93A; --yellow-soft: #FFF0C4; --yellow-ink: #9A6A00;
     --purple: #B9A5F4; --purple-lip: #8E76DC; --purple-soft: #ECE5FD; --purple-ink: #6A50C4;
-    --green: #8FD27A; --green-lip: #5FAE4C; --green-soft: #E2F5DA; --green-ink: #3F7F2E;
     --font: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
     --bouncy: linear(0, 0.055, 0.192, 0.373, 0.565, 0.745, 0.898, 1.016, 1.098, 1.144, 1.162, 1.158, 1.138, 1.11, 1.079, 1.049, 1.023, 1.002, 0.987, 0.978, 0.974, 0.974, 0.976, 0.981, 0.986, 0.991, 0.995, 0.999, 1);
     --smooth: linear(0, 0.067, 0.217, 0.391, 0.558, 0.7, 0.811, 0.893, 0.95, 0.985, 1.006, 1.016, 1.02, 1.019, 1.016, 1.013, 1.01, 1.007, 1.004, 1.003, 1.001, 1, 1);
@@ -73,7 +55,7 @@
   main { perspective: 1800px; }
   /* the card is a two-sided object: it turns on Y, each face hides its back */
   .card {
-    position: relative; width: min(1100px, 100%);
+    position: relative; width: min(860px, 100%);
     transform-style: preserve-3d; transform: rotateY(0deg);
     /* "backwards", not "both": a held opacity animation makes Chrome flatten the 3D flip and the back face vanishes */
     animation: card-in 900ms var(--bouncy) backwards;
@@ -82,7 +64,7 @@
   .face {
     background: var(--card); border-radius: 40px;
     box-shadow: 0 0 0 2px var(--edge), 0 10px 0 2px var(--card-lip);
-    padding: clamp(18px, 3.4vh, 36px) clamp(18px, 2.8vw, 32px) clamp(16px, 2.8vh, 30px);
+    padding: clamp(20px, 3.4vh, 34px) clamp(20px, 3.4vw, 36px) clamp(18px, 2.6vh, 26px);
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
   }
   .front { position: relative; }
@@ -131,12 +113,12 @@
   @keyframes photo-in { from { opacity: 0; scale: 0.4; } }
   @keyframes card-in { from { opacity: 0; scale: 0.6; rotate: -4deg; } 30% { opacity: 1; } }
 
-  .top { display: grid; grid-template-columns: auto 1fr; gap: clamp(16px, 2.6vw, 30px); align-items: center; }
+  .top { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3.4vw, 40px); align-items: center; }
 
   /* ---------- the big bubbly avatar ---------- */
   .pic-wrap { padding: 6px 6px 14px; }
   .pic {
-    --s: clamp(150px, 27vh, 252px);
+    --s: clamp(150px, 25vh, 232px);
     position: relative; display: block; width: var(--s); height: var(--s); padding: 7px; border-radius: 30%;
     background: #fff;
     box-shadow: 0 0 0 5px var(--yellow), 0 11px 0 5px var(--yellow-lip);
@@ -168,27 +150,26 @@
   .ch { display: inline-block; transition: translate 380ms var(--bouncy); }
   .ch:hover { translate: 0 -8px; }
   .word { display: inline-block; white-space: nowrap; } /* keeps letters of a word on one line */
-  .bio { margin: clamp(8px, 1.6vh, 14px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
+  .bio { margin: clamp(10px, 1.8vh, 16px) 0 0; color: var(--ink-2); font-size: clamp(15px, 2.1vh, 17px); font-weight: 700; max-width: 34em; --d: 400ms; }
 
-  .rows { margin-top: clamp(8px, 1.8vh, 16px); display: grid; gap: clamp(6px, 1vh, 9px); --d: 470ms; }
+  .rows { margin-top: clamp(10px, 1.8vh, 16px); display: grid; gap: 8px; --d: 470ms; }
   .row { display: grid; grid-template-columns: 92px 1fr; align-items: center; font-size: 17px; font-weight: 800; }
   .k { justify-self: start; font-size: 11px; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; }
   .k.discord { color: #4A55C8; background: #E2E5FE; }
   .k.email { color: var(--yellow-ink); background: var(--yellow-soft); }
   .k.github { color: var(--purple-ink); background: var(--purple-soft); }
-  .k.server { color: var(--green-ink); background: var(--green-soft); }
   .v { justify-self: start; font-weight: 800; text-decoration: underline 2.5px transparent; text-underline-offset: 4px; transition: text-decoration-color 140ms ease, color 140ms ease; min-width: 0; overflow-wrap: anywhere; text-align: left; }
   .v:hover { text-decoration-color: var(--yellow); }
   .copy-hint { display: inline-block; margin-left: 8px; font-size: 12px; font-weight: 800; color: var(--blue-ink); background: var(--blue-soft); padding: 1px 8px; border-radius: 999px; opacity: 0; scale: 0.6; transition: opacity 160ms ease, scale 360ms var(--bouncy); vertical-align: 2px; }
   .v:hover .copy-hint, .v:focus-visible .copy-hint, .v.done .copy-hint { opacity: 1; scale: 1; }
   .v.done .copy-hint { color: var(--yellow-ink); background: var(--yellow-soft); }
   /* GitHub's pill says where the link goes; its arrow nudges up and out on hover */
-  .go-hint { display: inline-flex; align-items: center; gap: 4px; color: var(--purple-ink); background: var(--purple-soft); }
-  .go-hint svg { display: block; width: 13px; height: 13px; flex: none; transition: translate 300ms var(--bouncy); }
+  .go-hint { color: var(--purple-ink); background: var(--purple-soft); }
+  .go-hint svg { width: 10px; height: 10px; margin-left: 4px; vertical-align: -0.5px; transition: translate 300ms var(--bouncy); }
   .v:hover .go-hint svg { translate: 2px -2px; }
 
   /* likes: chunky keys you can press */
-  .likes { margin-top: clamp(10px, 2vh, 18px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
+  .likes { margin-top: clamp(12px, 2vh, 18px); display: flex; flex-wrap: wrap; gap: 10px 10px; --d: 540ms; }
   .like {
     display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 10px; border-radius: 14px;
     font-size: 14px; font-weight: 800; margin-bottom: 4px;
@@ -260,14 +241,13 @@
 
   /* ---------- projects tray ---------- */
   .tray {
-    margin-top: clamp(14px, 2.8vh, 26px); background: var(--well); border-radius: 30px; padding: 14px;
+    margin-top: clamp(16px, 3vh, 26px); background: var(--well); border-radius: 30px; padding: 14px;
     box-shadow: inset 0 -4px 0 var(--card-lip);
   }
   .tray-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 2px 6px 12px; animation: rise 700ms var(--bouncy) 620ms both; }
   .tray-head h2 { margin: 0; font-size: 19px; font-weight: 900; letter-spacing: -0.01em; }
   .tray-head p { margin: 0; font-size: 13px; font-weight: 700; color: var(--ink-2); }
-  /* one row, so every popup opens above the row and never covers another project */
-  .projects { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
   .proj { position: relative; z-index: 1; animation: pop-in 700ms var(--bouncy) both; animation-delay: var(--d); }
   /* the animation gives each tile its own layer, so the open one has to rise above the flip button */
@@ -295,15 +275,10 @@
   .tile .ico img { width: 100%; height: 100%; object-fit: cover; }
   .tile .ico svg { width: 32px; height: 32px; }
   .tile strong { display: block; font-size: 17px; font-weight: 900; line-height: 1.2; }
-  .wip { display: inline-block; margin-left: 6px; vertical-align: 2px; font-size: 10px; font-weight: 900; letter-spacing: 0.07em; line-height: 1.5; padding: 0 7px; border-radius: 999px; color: #4A55C8; background: #E2E5FE; }
   .tile small { display: block; font-size: 13px; font-weight: 700; color: var(--ink-2); line-height: 1.3; margin-top: 2px; }
   .proj.pane  { --t-c: var(--purple); --t-lip: var(--purple-lip); --t-soft: var(--purple-soft); --t-lip2: #D5C8FA; --t-ink: var(--purple-ink); }
   .proj.team  { --t-c: var(--blue);   --t-lip: var(--blue-lip);   --t-soft: var(--blue-soft);   --t-lip2: #C2CCF4; --t-ink: var(--blue-ink); }
   .proj.itch  { --t-c: var(--yellow); --t-lip: var(--yellow-lip); --t-soft: var(--yellow-soft); --t-lip2: #F2D58A; --t-ink: var(--yellow-ink); }
-  .proj.mcstats { --t-c: var(--green); --t-lip: var(--green-lip); --t-soft: var(--green-soft); --t-lip2: #BFE3B0; --t-ink: var(--green-ink); }
-  .px { shape-rendering: crispEdges; } /* mcstats' grass block stays pixel-sharp */
-  /* sized and rounded to match the rounded square in Pane's icon art; clip-path rounds an inline svg reliably */
-  .tile .ico svg.px, .pop-pic svg.px { width: 80%; height: 80%; border-radius: 0; clip-path: inset(0 round 24%); }
 
   /* ---------- popups, after Pane's who-card: they pop up out of the tile with a bounce ---------- */
   .pop {
@@ -380,20 +355,8 @@
   .toast.on { opacity: 1; scale: 1; transition: opacity 140ms ease, scale 520ms var(--bouncy); }
 
   .hint { position: fixed; z-index: 3; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; font-size: 12.5px; font-weight: 700; color: var(--ink-2); opacity: 0.8; animation: rise 700ms var(--bouncy) 1200ms both; pointer-events: none; white-space: nowrap; }
-  /* too narrow for four full tiles in a row: icon over name, the subtitle waits in the popup */
-  @media (max-width: 1140px) {
-    .tile { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding: 10px 6px 9px; border-radius: 20px; }
-    .tile strong { font-size: 14px; }
-    .tile small { display: none; }
-    .wip { display: table; margin: 3px auto 0; }
-    .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
-    .tile .ico svg { width: 26px; height: 26px; }  }
   /* ---------- small screens: stack, but still one screen tall ---------- */
   @media (max-width: 720px) {
-    /* popup footer: keep the button and URL on one line; the URL truncates instead of wrapping */
-    .pop-foot { flex-wrap: nowrap; min-width: 0; }
-    .pop-foot .go { flex-shrink: 0; white-space: nowrap; }
-    .pop-foot .url { min-width: 0; flex: 1 1 auto; }
     /* phones: the card sits near the top of the screen, so the popup drops below the button instead */
     .flip-wrap { top: var(--top); bottom: auto; flex-direction: column; }
     .flip-tip { transform-origin: calc(100% - 25px) -12px; }
@@ -418,9 +381,12 @@
     .copy-hint { display: none; }
     main { padding-bottom: 18px; }
     .projects { gap: 8px; }
-    .tile { padding: 10px 4px 9px; }
-    .tile strong { font-size: 13px; }
+    .tile { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding: 10px 6px 9px; border-radius: 20px; }
+    .tile strong { font-size: 14px; }
+    .tile small { display: none; }
     .tray-head { margin-bottom: 8px; }
+    .tile .ico { width: 42px; height: 42px; border-radius: 14px; }
+    .tile .ico svg { width: 26px; height: 26px; }
     .tray { padding: 10px; border-radius: 26px; }
     .tray-head p { display: none; }
     .hint { display: none; }
@@ -461,9 +427,8 @@
 
         <div class="rows">
           <div class="row"><span class="k discord">Discord</span><button class="v copy" type="button" data-copy="basicallyahucklberi">basicallyahucklberi<span class="copy-hint">Copy</span></button></div>
-          <div class="row"><span class="k server">Server</span><a class="v" href="https://discord.gg/qUaJw55eEW" target="_blank" rel="noopener">discord.gg/qUaJw55eEW<span class="copy-hint go-hint">Join<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3.5h7v7M12.5 3.5l-9 9"/></svg></span></a></div>
           <div class="row"><span class="k email">Email</span><button class="v copy" type="button" data-copy="hfanggamedev@gmail.com">hfanggamedev@gmail.com<span class="copy-hint">Copy</span></button></div>
-          <div class="row"><span class="k github">GitHub</span><a class="v" href="https://github.com/HFang1012" target="_blank" rel="noopener">HFang1012<span class="copy-hint go-hint">GitHub<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3.5h7v7M12.5 3.5l-9 9"/></svg></span></a></div>
+          <div class="row"><span class="k github">GitHub</span><a class="v" href="https://github.com/HFang1012" target="_blank" rel="noopener">HFang1012<span class="copy-hint go-hint">GitHub<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></span></a></div>
         </div>
 
         <div class="likes" role="list" aria-label="Things I like">
@@ -486,7 +451,7 @@
         <div class="proj pane" style="--d:760ms">
           <button class="tile" type="button" aria-expanded="false" aria-controls="pop-pane">
             <span class="ico"><img src="https://hfang1012.github.io/Pane-Mac/icon.png" alt="" width="52" height="52"></span>
-            <span><strong>Pane<span class="wip">WIP</span></strong><small>Small tools for your Mac</small></span>
+            <span><strong>Pane</strong><small>Small tools for your Mac</small></span>
           </button>
           <div class="pop" id="pop-pane" role="group" aria-label="About Pane">
             <div class="pop-head">
@@ -506,30 +471,7 @@
           </div>
         </div>
 
-        <div class="proj mcstats" style="--d:840ms">
-          <button class="tile" type="button" aria-expanded="false" aria-controls="pop-mcstats">
-            <span class="ico"><svg class="px" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="#8a5a33"/><rect width="8" height="3" fill="#5fae4c"/><path fill="#5fae4c" d="M1 3h1v1H1zM4 3h2v1H4zM7 3h1v1H7z"/><path fill="#86cf6f" d="M0 0h2v1H0zM5 0h1v1H5zM3 1h1v1H3zM6 1h2v1H6z"/><path fill="#6b4324" d="M2 5h1v1H2zM6 4h1v1H6zM4 6h2v1H4zM0 7h1v1H0z"/><path fill="#a47148" d="M0 4h1v1H0zM3 5h1v1H3zM6 6h1v1H6zM2 7h1v1H2z"/></svg></span>
-            <span><strong>mcstats<span class="wip">WIP</span></strong><small>Minecraft server stats</small></span>
-          </button>
-          <div class="pop" id="pop-mcstats" role="group" aria-label="About mcstats">
-            <div class="pop-head">
-              <span class="pop-pic"><svg class="px" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="#8a5a33"/><rect width="8" height="3" fill="#5fae4c"/><path fill="#5fae4c" d="M1 3h1v1H1zM4 3h2v1H4zM7 3h1v1H7z"/><path fill="#86cf6f" d="M0 0h2v1H0zM5 0h1v1H5zM3 1h1v1H3zM6 1h2v1H6z"/><path fill="#6b4324" d="M2 5h1v1H2zM6 4h1v1H6zM4 6h2v1H4zM0 7h1v1H0z"/><path fill="#a47148" d="M0 4h1v1H0zM3 5h1v1H3zM6 6h1v1H6zM2 7h1v1H2z"/></svg></span>
-              <span><strong class="pop-title st">mcstats</strong><span class="pop-tag st">Minecraft mod + site</span></span>
-            </div>
-            <p class="pop-desc st">A web page for your Minecraft server: who played, when, and for how long, plus the chat, every death and every advancement. Admins can even watch the world live and chat with players from the browser.</p>
-            <div class="pop-rows st">
-              <div class="pop-row"><span class="k2">Runs on</span><span>Fabric servers, Minecraft 26.2</span></div>
-              <div class="pop-row"><span class="k2">Made with</span><span>Empty Console</span></div>
-            </div>
-            <div class="pop-foot st">
-              <a class="go" href="https://mcstats.live/" target="_blank" rel="noopener">See mcstats
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7M13 3L4 12"/></svg></a>
-              <span class="url">mcstats.live</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="proj team" style="--d:920ms">
+        <div class="proj team" style="--d:840ms">
           <button class="tile" type="button" aria-expanded="false" aria-controls="pop-team">
             <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="22" rx="6" fill="#fff" stroke="#5A6CC4" stroke-width="2.5"/><path d="M9 13l4 3-4 3" fill="none" stroke="#3D4FAE" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect class="blink" x="15" y="18" width="7" height="2.6" rx="1.3" fill="#3D4FAE"/></svg></span>
             <span><strong>Empty Console</strong><small>The team I build with</small></span>
@@ -541,7 +483,7 @@
             </div>
             <p class="pop-desc st">Four of us making projects together: emey, shyguy, automagicle, and me.</p>
             <div class="pop-rows st">
-              <div class="pop-row"><span class="k2">Projects</span><span>Student Atlas, mcstats</span></div>
+              <div class="pop-row"><span class="k2">Projects</span><span>Student Atlas, Hestia</span></div>
               <div class="pop-row"><span class="k2">Me</span><a href="mailto:hfanggamedev@gmail.com">hfanggamedev@gmail.com</a></div>
             </div>
             <div class="pop-foot st">
@@ -552,7 +494,7 @@
           </div>
         </div>
 
-        <div class="proj itch" style="--d:1000ms">
+        <div class="proj itch" style="--d:920ms">
           <button class="tile" type="button" aria-expanded="false" aria-controls="pop-itch">
             <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 9h12a7 7 0 0 1 6.8 8.6l-.8 3.4a3.2 3.2 0 0 1-5.5 1.4L20 20h-8l-2.5 2.4A3.2 3.2 0 0 1 4 21l-.8-3.4A7 7 0 0 1 10 9z" fill="#fff" stroke="#E9A93A" stroke-width="2.5" stroke-linejoin="round"/><path d="M10.5 12.5v5M8 15h5" stroke="#9A6A00" stroke-width="2.4" stroke-linecap="round"/><circle cx="21" cy="13.6" r="1.6" fill="#7C8FE0"/><circle cx="23.6" cy="16.6" r="1.6" fill="#B9A5F4"/></svg></span>
             <span><strong>itch.io</strong><small>My games and jams</small></span>

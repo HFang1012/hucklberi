@@ -29,7 +29,7 @@ jobs:
       - name: Collect the site files
         run: |
           mkdir _site
-          cp index.html avatar.png favicon.png og.png _site/
+          cp index.html avatar.png favicon.png _site/
           cp -R photos _site/
           touch _site/.nojekyll
 
